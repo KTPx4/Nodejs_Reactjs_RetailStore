@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
-import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// import './App.css';
+import {   BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { listRoutes } from './routes';
+
+import HeaderNav from './components/HeaderComponents/Navbars';
+
+import FooterCpn from './components/FooterComponents/Footer';
 
 
 
@@ -15,31 +19,37 @@ function App() {
 
     return(
       <div>
-       
         <Router>
-          <Routes>                    
-          {
-            listRoutes.map((r)=>{
+          <Routes>
+              {
+                listRoutes.map((r)=>{
 
-              let id = r.id
-              let path = r.path
-              let Page = r.pages
+                  let id = r.id
+                  let path = r.path
+                  let Page = r.pages; 
 
-              return(
-                <Route key={id} path={path} element={<Page />} >
+                  // page 404 will not show header and footer
+                  let Headers = id===404 ? Fragment : HeaderNav;             
+                  let Footers = id===404 ? Fragment : FooterCpn;                
                   
-                  
-                </Route>
-               
-              )
+                  return(                 
+                                    
+                    <Route key={id} path={path} element={
+                        <>
+                            <Headers /> 
 
-            })
-          }     
-                    
-          </Routes>
+                            <Page />
+
+                            <Footers />
+                        </>
+                      }>                         
+                    </Route>
+                      
+                  )  
+                })
+              }
+          </Routes>            
         </Router>
-       
-       
       </div>
     )
   
