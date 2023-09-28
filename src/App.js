@@ -24,11 +24,10 @@ function App() {
               let id = r.id
               let path = r.path
               let Page = r.pages
-             
-             
+
               return(
                 <Route key={id} path={path} element={<Page />} >
-                
+                  
                   
                 </Route>
                
