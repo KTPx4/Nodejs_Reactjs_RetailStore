@@ -15,16 +15,11 @@ const listRoutes = [
   },
   {
     id: 2,
-    path: "/Account/Employees",
+    path: "/Account",
     title: 'Manager Account',
     pages: Employee
   },
-  {
-    id: 2,
-    path: "/Account/Customer",
-    title: 'Manager Customer',
-    pages: Customer
-  },
+ 
   {
     id: 404,
     path: "*",
