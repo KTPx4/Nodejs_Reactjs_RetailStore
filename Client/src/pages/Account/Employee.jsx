@@ -8,7 +8,7 @@ class Employee extends React.Component {
      }
     render() { 
         return (
-            <div>Manager Account</div>
+            <div>Emp Account</div>
         );
     }
 }

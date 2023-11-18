@@ -3,7 +3,9 @@ import React from "react";
 
 const FooterCpn =  () =>{
     return(
-        <div>Footer</div>
+        <>
+            <strong>This is Footer</strong>
+        </>
     )
 }
 
