@@ -11,10 +11,9 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 app.post('/login', AccountMiddleware.InputLogin, AccountController.Login);
 
-
-
 app.post('/register',AccountMiddleware.InputRegister, AccountController.Register)
 
+app.get('/active',AccountMiddleware.InputActive,  AccountController.Active)
 
 app.post('/testToken', async(req, res)=>{
     let {token} = req.body
@@ -37,4 +36,5 @@ app.post('/testToken', async(req, res)=>{
     })
   
 })
+
 module.exports = app

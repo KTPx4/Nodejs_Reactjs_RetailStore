@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const secretKey = process.env.TOKEN_LOGIN_ACCOUNT || 'token-login-account';
 const secretActive = process.env.TOKEN_ACTIVE_ACCOUNT || 'token-active-account';
 const { sendTestEmail } = require("../modules/mailer");
+const { trusted } = require('mongoose');
+const SERVER = process.env.SERVER || 'http://localhost:3000' 
 
 
 // "web": {
@@ -59,18 +61,8 @@ module.exports.Login = async(req, res) =>{
 
 module.exports.Register = async(req, res)=>{
     let {email, fullName} = req.body
-    console.log("email:::: ", email);
 
-    var account = await FindByEmail(email)
-
-    
-    if(account)
-    {
-        return res.json({
-            code: 303,
-            message: "Email đã tồn tại"
-        })
-    }
+    //console.log("email:::: ", email);  
 
     let UserName = email.split("@")[0];
     let Password = UserName
@@ -91,7 +83,15 @@ module.exports.Register = async(req, res)=>{
         const expiresIn = '1m';
         const token = jwt.sign(data, secretActive, { expiresIn }); // token auth account
         
-        await sendTestEmail(email, token)
+        const subject = "Active Account";
+        const html = `
+          <p>Hí bạn ${email},</p>
+          <p>Vui lòng kích hoạt tài khoản của bạn <a href="${SERVER}/api/account/active?email=${email}&token=${token}" >Tại đây</a> </p>
+          <strong>Liên Kết sẽ hết hạn trong 1 phút, vui lòng nhanh cái tay lên ^^</strong>
+          <p>Thank you</p>
+          `;
+
+        await sendTestEmail(email, subject, html)
         .then(()=>{
             return res.json({
                 code: 200,
@@ -123,6 +123,28 @@ module.exports.Register = async(req, res)=>{
   
 }
 
+module.exports.Active = async(req, res)=>{
+    let email =req.query.email || req.body.email 
+    let token = req.query.token || req.body.token
+
+    jwt.verify(token, secretActive, async(err, data) => {
+        if (err) 
+            return res.json({
+                code: 301,
+                message: "Active Tài khoản thất bại hoặc liên kết đã hết hạn!"
+        });
+
+        await AccountModel.findOneAndUpdate({Email: email}, {isActive: true})
+        
+        return res.json({
+            code: 200,
+            message: "Kích Hoạt tài khoản thành công",
+            data: {
+                email: data.Email
+            }
+        })
+    })
+}
 
 
 

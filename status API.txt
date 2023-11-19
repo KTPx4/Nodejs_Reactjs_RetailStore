@@ -1,0 +1,7 @@
+200: success
+
+300: Login Failed
+301: Null value input
+302: Invalid Type input
+303: Exists Value
+304: Failed Action
