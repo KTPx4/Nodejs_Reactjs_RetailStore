@@ -7,7 +7,10 @@ let AccountSchema = new mongoose.Schema({
         unique: true
     },
     Password: String,
-    User: String,
+    User: {
+        type:String,
+        unique: true
+    },
     Role: {
         type: String, 
         default: 'User'

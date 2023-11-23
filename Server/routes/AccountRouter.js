@@ -2,18 +2,27 @@ const express= require('express')
 const app = express.Router()
 const jwt = require('jsonwebtoken');
 
+//controller
 const AccountController = require('../controllers/AccountController')
-const AccountMiddleware = require('../middlewares/AccountMiddleware')
+// middleware
+const AccountValidator = require('../middlewares/Account/Validator')
+const Auth = require('../middlewares/Account/Auth')
 
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}))
 
+app.get('/', AccountController.GetAll)
 
-app.post('/login', AccountMiddleware.InputLogin, AccountController.Login);
+app.get('/active',AccountValidator.InputActive,  AccountController.Active)
 
-app.post('/register',AccountMiddleware.InputRegister, AccountController.Register)
+app.post('/login', AccountValidator.InputLogin, AccountController.Login);
 
-app.get('/active',AccountMiddleware.InputActive,  AccountController.Active)
+app.post('/register',AccountValidator.InputRegister, AccountController.Register)
+
+
+app.post('/changepassword',Auth.AuthAccount, AccountValidator.InputChangePass, AccountController.ChangePassword)
+
+app.post('/sendactive', Auth.AuthRoleAmin, AccountValidator.InputSendAcitve, AccountController.CreateActive)
 
 app.post('/testToken', async(req, res)=>{
     let {token} = req.body

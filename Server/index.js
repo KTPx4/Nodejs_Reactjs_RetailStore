@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000
 
 app.use(cors())
 
-app.use('/', HomeRouter)
+app.use('/api', HomeRouter)
 app.use('/api/account', AccountRouter)
 
 
@@ -37,7 +37,7 @@ const startProgram = async()=>{
     let connect = await require('./models/DB')
     .then(()=>{
 
-        mongoose.connection.dropCollection('accounts')
+      //      mongoose.connection.dropCollection('accounts')
         console.log("Connect DB Success");
         
         app.listen(port, () => {
