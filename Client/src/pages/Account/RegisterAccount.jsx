@@ -13,20 +13,20 @@ class RegisterPage extends React.Component{
             redirectToHome: false
         };
         
-        this.handleRegister = this.handleRegister.bind(this);
+      //  this.handleRegister = this.handleRegister.bind(this);
 
     }
 
-    componentDidCatch()
+    componentDidMount()
     {
         const token = localStorage.getItem(_Token_Auth);
-        if(token)
+        
+        if (token ) 
         {
-            this.setState({redirectToHome: true,
-                redirectToLogin: false
-            })
+            this.setState({ redirectToHome: true });
         }
-        console.log("token register: ", token);
+
+   
         document.title= "Đăng Ký";      
 
         // Change icon
@@ -36,7 +36,7 @@ class RegisterPage extends React.Component{
         document.head.appendChild(link);
     }
 
-    handleRegister()
+    handleRegister = () =>
     { 
         // register action 
 
