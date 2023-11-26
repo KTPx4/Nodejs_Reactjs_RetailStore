@@ -5,13 +5,15 @@ import { Outlet } from "react-router-dom"
 
 const LayoutPage = () =>{
     return(
-        <>
+        <div className="layout-container">
             <HeaderNav />
-            
-            < Outlet />
+
+            <div className="layout-body">
+                <Outlet />
+            </div>
 
             <FooterCpn />
-        </>
+        </div>
     )
 }
 

@@ -39,7 +39,7 @@ module.exports.GetAll = async(req, res) =>{
 module.exports.Login = async(req, res) =>{
     
     let {user, password} = req.body 
-
+  //  console.log("1 Request login");
     let accountUser = undefined
 
     // find db
@@ -252,7 +252,7 @@ module.exports.CreateActive = async(req, res)=>{
             console.log("Error at accountController: ", err)
             return res.json({
                 code: 400,
-                message: "Gửi email thất bại"
+                message: "Gửi email thất bại: " + err.message
                
             })
         })
@@ -270,46 +270,93 @@ module.exports.CreateActive = async(req, res)=>{
     }
   
 }
+module.exports.ChangePassword = async (req, res) => {
+    try {
+        let { oldPassword, newPassword } = req.body;
+        let email = req.User.email;
 
-module.exports.ChangePassword = async(req, res) =>{
-    let {oldPassword, newPassword} = req.body
-    let email = req.User.email
+        const account = await AccountModel.findOne({ Email: email });
 
-    AccountModel.findOne({Email: email})
-    .then(account=>{
-        if(!account)
+        if (!account) 
         {
-            throw new Error('Tài khoản không tồn tại')
+            throw new Error('Tài khoản không tồn tại');
         }
 
-        return bcrypt.compare(oldPassword, account.Password)
-    })
-    .then((PassMatch) =>{
-      //  console.log(PassMatch);
-        if(!PassMatch)
+        // Nếu firstLogin là true, thực hiện hashPassword và update
+        if (account.firstLogin) 
         {
-            throw new Error('Mật khẩu cũ không đúng')
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+            
+            await AccountModel.findOneAndUpdate(
+                { Email: email },
+                { Password: hashedPassword, firstLogin: false }
+            );
+        } 
+        else 
+        {
+            // Nếu firstLogin là false, thực hiện so sánh mật khẩu cũ và cập nhật
+            const passwordMatch = await bcrypt.compare(oldPassword, account.Password);
+
+            if (!passwordMatch) {
+                throw new Error('Mật khẩu cũ không đúng');
+            }
+
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+            await AccountModel.findOneAndUpdate(
+                { Email: email },
+                { Password: hashedPassword }
+            );
         }
-    })
-    .then(()=>{
-        return bcrypt.hash(newPassword, 10)        
-    })
-    .then((hashed)=>{
-        return AccountModel.findOneAndUpdate({Email: email}, {Password: hashed});
-    })
-    .then(()=>{
+
         return res.json({
             code: 200,
             message: "Cập nhật mật khẩu mới thành công"
-        })
-    })
-    .catch(err=>{
+        });
+    } 
+    catch (err) {
         return res.json({
             code: 400,
             message: "Không thể đổi mật khẩu: " + err.message
+        });
+    }
+};
+
+module.exports.VerifyLogin = async (req, res) =>{
+    let tokenFromHeader =(req.header('Authorization'))
+    let token = undefined
+
+    if(!tokenFromHeader)
+        token =  req.body.token  
+
+    else
+        token = tokenFromHeader.split(' ')[1]
+
+
+    if(!token || token === undefined)
+    {
+        return res.json({
+            code: 401,
+            message: 'Chưa có token'
         })
-    })
+    }
+
+    jwt.verify(token, SECRET_LOGIN, async(err, data)=>{
+        if(err)
+        {
+            return res.json({
+                code: 401,
+                message: 'Chưa đăng nhập, hoặc phiên đăng nhập đã hết hạn'
+            })
+        }
+        
+        return res.json({
+            code: 200,
+            message: 'Đã Đăng Nhập'
+        })
+    }) 
 }
+
+
 
 
 

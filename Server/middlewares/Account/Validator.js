@@ -139,15 +139,20 @@ module.exports.InputSendAcitve = async (req, res, next) =>
             message: "Thiếu địa chỉ email cần gửi kích hoạt"
         })
     }
-    await AccountModel.findOne({Email: email})
-    .then(account=>{
-        if(!account)
-            return res.json({
-                code: 400,
-                message: "Tài Khoản không tồn tại để kích hoạt"
+    let account = await AccountModel.findOne({Email: email})
+    
+    if(!account)
+    {
+        return res.json({
+            code: 400,
+            message: "Tài Khoản không tồn tại để kích hoạt"
 
-            })
-    })
+        })
+    }
+    else
+    {
+        next()
+    }
 
-    next()
+    
 }
