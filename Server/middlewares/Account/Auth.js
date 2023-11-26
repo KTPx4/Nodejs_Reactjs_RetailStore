@@ -8,7 +8,7 @@ const authAccount =  (req, res, next) =>{
     let tokenFromHeader =(req.header('Authorization'))
     let token = undefined
 
-    if(!tokenFromHeader )
+    if(!tokenFromHeader)
         token =  req.body.token  
 
     else
@@ -97,6 +97,7 @@ const authRoleAmin = async(req, res, next)=>{
        
     
 }
+
 
 
 module.exports.AuthAccount = authAccount

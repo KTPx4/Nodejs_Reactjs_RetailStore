@@ -46,4 +46,6 @@ app.post('/testToken', async(req, res)=>{
   
 })
 
+app.get('/login', AccountController.VerifyLogin) // verify token login 
+
 module.exports = app

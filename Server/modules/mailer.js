@@ -4,7 +4,7 @@ const nodemailer = require("nodemailer");
 
 const CLIENT_ID = "250216999612-a06hluqqf48ov1a13luh934u2aobh0t4.apps.googleusercontent.com";
 const CLIENT_SECRET = "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";
-const REFRESH_TOKEN = "1//04r0cvQIPaglSCgYIARAAGAQSNwF-L9Irb4QgTWuSqyfuBVVA3zKICL7pstDlK-SlTZ0d99Oz3_3lM8TNwsJSzquH2fkl6f3dmvM";
+const REFRESH_TOKEN = "1//04e999ClCYcltCgYIARAAGAQSNwF-L9Ir8I8GFuGGaDjWHwGAkEO66bbHx_1z7z2Z6mV5dCQ5ZuuRc-tgpA8Sb1JB7gEOgX7tg-s";
 const REDIRECT_URI = "https://developers.google.com/oauthplayground";
 const MY_EMAIL ="kieuthanhphat.2003.2018hdb@gmail.com";
 
@@ -19,6 +19,7 @@ oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
 const sendTestEmail = async (toEmail, subject, html) => {
   const ACCESS_TOKEN = await oAuth2Client.getAccessToken();
+  // console.log("Access Token: ", ACCESS_TOKEN);
   const transport = nodemailer.createTransport({
     service: "gmail",
     auth: {

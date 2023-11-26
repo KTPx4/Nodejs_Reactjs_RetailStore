@@ -229,6 +229,10 @@ a:hover {
 .btn_register:hover {
     background-color: #67cae0;
 }
+.AlertMessage{
+    font-style: normal;
+    text-transform: none;
+}
 
 @media screen and (max-width: 1000px) {
     form {
