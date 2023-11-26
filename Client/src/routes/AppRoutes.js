@@ -27,9 +27,9 @@ const AppRoutes  = (props) =>{
                 <Route path="/account/login" element={ <LoginPage/> }/>
                 <Route path="/account/register" element={ <RegisterPage/> }/>
                 <Route path="/account" element={<ProtectedRoute><LayoutPage /></ProtectedRoute>} >
-                        <Route index element={ < ProfilePage />} />                        
-                        <Route path="employee" element={ <AdminPage/> } />
-                        <Route path="admin" element={ <AdminPage/> } />
+                    <Route index element={ < ProfilePage />} />                        
+                    <Route path="employee" element={ <AdminPage/> } />
+                    <Route path="admin" element={ <AdminPage/> } />
                     
                 </Route>    
                

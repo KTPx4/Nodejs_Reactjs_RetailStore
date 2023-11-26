@@ -1,0 +1,30 @@
+/api/
+
+*Account: /account
+	+ '/' : Get All Account
+		Method: GET
+
+	+ '/active' : Active Account
+		Method: GET
+		params(query) - body: token
+
+
+	+ '/register' : Register Account
+		Method: POST
+		Body: {email, fullName} 
+
+	+ '/login' : Login Account
+		Method: POST
+		Body: {user, password}
+
+
+	+ '/changepassword' : Change Password Account - need Authentication at firt 
+		Authentication: header / body->token (params token in body)
+		Method: POST
+		Body: {oldPassword, newPassword}
+
+	+ '/sendactive' : Send active for account - need Authentication at firt and trust ROLE
+		Role: Admin
+		Authentication: header / body->token (params token in body)
+		Method: POST
+		Body: {email}

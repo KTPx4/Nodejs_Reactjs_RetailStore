@@ -1,0 +1,33 @@
+------- Success
+200: success
+201 Created
+	The request succeeded, and a new resource was created as a result. This is typically the response sent after POST requests, or some PUT requests.
+
+203: success - need more infor
+
+------- Redirect	  	
+
+
+------- Client
+400 Bad Request
+The server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing).
+
+401 Unauthorized
+Although the HTTP standard specifies "unauthorized", semantically this response means "unauthenticated". That is, the client must authenticate itself to get the requested response.
+
+402 Payment Required Experimental
+This response code is reserved for future use. The initial aim for creating this code was using it for digital payment systems, however this status code is used very rarely and no standard convention exists
+
+403 Forbidden
+The client does not have access rights to the content; that is, it is unauthorized, so the server is refusing to give the requested resource. Unlike 401 Unauthorized, the client's identity is known to the server.
+
+------- Server
+5xx
+
+------
+
+1xx (Thông tin): Thông báo rằng request đã được nhận và server đang xử lý.
+2xx (Thành công): Thông báo rằng request đã được nhận và xử lý thành công.
+3xx (Chuyển hướng): Thông báo rằng client cần phải thực hiện một số hành động để hoàn thành request.
+4xx (Lỗi từ client): Thông báo rằng request không hợp lệ hoặc không thể được xử lý.
+5xx (Lỗi từ server): Thông báo rằng server không thể xử lý request.
