@@ -336,7 +336,7 @@ const LoginPage = (props) => {
 
     if (redirectToHome) {
         console.log("Page login: ", isChangePass);
-        return <Redirect to={{ pathname: '/home',  state: {isChangePass: isChangePass}} } />;
+        return <Redirect to='/' state={{isChangePass: isChangePass}}/>;
         
      
     } else if (redirectToRegister) {

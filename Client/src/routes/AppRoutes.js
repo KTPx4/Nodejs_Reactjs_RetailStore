@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate, Link, Outlet, useNavigate } from "react-router-dom";
 import axios from 'axios';
-
+import React, { useEffect, useState } from 'react';
 
 import NotFound from '../pages/NotFound/NotFound';
 import LayoutPage from "../components/Layout/LayoutPage";
@@ -14,45 +14,48 @@ const _Token_Auth = process.env.REACT_APP_AUTH_LOGIN || 'TOKEN_AUTH_LOGIN';
 const _URLServer = process.env.REACT_APP_SERVER || 'http://localhost:3001'
 
 const AppRoutes  = (props) =>{
+
     const tokenLogin = localStorage.getItem(_Token_Auth) || ''
     var serverLogin = `${_URLServer}/api/account/login`;
 
     
 
-    var isChangePass = props.location?.state.isChangePass || false
-    console.log("Router: ", isChangePass);
-    axios({
-                url: serverLogin,
-                method: 'GET',
-                headers: {
-                    authorization: `bearer ${tokenLogin}`, // token auth login,
-                    "Content-Type": 'application/json'
-                },
-                //data: formData
-    })
-    .then((res) => {
-        
-        let code = res.data.code;
-        let message = res.data.message;
-        console.log( "data at verify: ",res.data);
+    const [isChangePass, setIsChangePass] = useState(false);
 
+    useEffect(() => {
+      const fetchData = async () => {
+       
+        try {
+          const res = await axios.get(serverLogin, {
+            headers: {
+              authorization: `bearer ${tokenLogin}`,
+              'Content-Type': 'application/json',
+            },
+          });
+  
+          const code = res.data.code;
         if (code === 200) 
         {
-           
+             setIsChangePass(false);
+          
         } 
-        else if (code === 203 ) 
+        else if (code === 203) 
         {
-            isChangePass = true
+        setIsChangePass(true);
         }
-        else // đăng nhập thất bại 
+        else 
         {
-            isChangePass = false
+            setIsChangePass(false);
+            console.log("Router: ", isChangePass);
         }
-    })
-    .catch((err) => {
-        console.log("Error at 'Home' fetch verify token: ", err);
-    });
-    
+        } catch (err) {
+          console.log("Error at 'Home' fetch verify token: ", err);
+        }
+      };
+  
+       fetchData();
+    }, []);
+
     // console.log( "isChangePass at router: ", isChangePass);
     return (
         <>

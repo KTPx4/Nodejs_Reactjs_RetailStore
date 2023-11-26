@@ -13,10 +13,11 @@ const _Root_IMG = __dirname + "img/home";
 
 const HomePage = (props) =>{
 
-    const isChangePass =  props.location?.state.isChangePass || props.isChangePass || false;
-
+   // const isChangePass =  props.location?.state.isChangePass || props.isChangePass || false;
+    const location = useLocation();
+    const isChangePass = location.state?.isChangePass ;
     //alert(props.location?.state.isChangePass)
-    console.log("Page Home :", props.isChangePass );
+    console.log("Page Home :", isChangePass );
     useEffect(() =>{
         
         
