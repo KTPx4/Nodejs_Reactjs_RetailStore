@@ -225,12 +225,14 @@ import { Navigate as Redirect } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import axios from 'axios';
-import HomePage from '../Home/Home';
+
+import { useDispatch } from "react-redux";
 
 const _Root_IMG = __dirname + "img/login";
 const _Token_Auth = process.env.REACT_APP_AUTH_LOGIN || 'TOKEN_AUTH_LOGIN';
 
 const LoginPage = (props) => {
+    const dispatch = useDispatch();
 
     const [redirectToHome, setRedirectToHome] = useState(false);
     const [redirectToRegister, setRedirectToRegister] = useState(false);
@@ -254,6 +256,10 @@ const LoginPage = (props) => {
         link.href = `${_Root_IMG}/login.ico`; 
         document.head.appendChild(link);
     }, []);
+
+    function handleChange() {
+        dispatch({ type: "IS_CHANGE_PASS", payload: true });
+      }
 
     const handleLogin = (event) => {
         event.preventDefault();
@@ -298,9 +304,10 @@ const LoginPage = (props) => {
                 setError('');
                 console.log("Success Login, ", token);
                 localStorage.setItem(_Token_Auth, token);
+            
 
                 if (code === 203) {
-                    setIsChangePass(true);
+                    handleChange();     
                 }
                 else if(200)
                 {

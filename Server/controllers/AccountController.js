@@ -348,7 +348,23 @@ module.exports.VerifyLogin = async (req, res) =>{
                 message: 'Chưa đăng nhập, hoặc phiên đăng nhập đã hết hạn'
             })
         }
-        
+        let email = data.email || "";
+        let acc =await AccountModel.findOne({Email: email})
+        if(!acc)
+        {
+            return res.json({
+                code: 400,
+                message: 'Không tìm thấy tài khoản'
+            })   
+        }
+        if(acc.firstLogin)
+        {
+            return res.json({
+                code: 203,
+                message:"Đăng nhập thành công"
+            })
+        }
+            
         return res.json({
             code: 200,
             message: 'Đã Đăng Nhập'

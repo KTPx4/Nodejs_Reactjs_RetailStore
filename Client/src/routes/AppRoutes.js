@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate, Link, Outlet, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from "react-redux";
 
 import NotFound from '../pages/NotFound/NotFound';
 import LayoutPage from "../components/Layout/LayoutPage";
@@ -17,53 +18,52 @@ const AppRoutes  = (props) =>{
 
     const tokenLogin = localStorage.getItem(_Token_Auth) || ''
     var serverLogin = `${_URLServer}/api/account/login`;
-
-    
-
-    const [isChangePass, setIsChangePass] = useState(false);
+    const dispatch = useDispatch(); 
 
     useEffect(() => {
       const fetchData = async () => {
        
         try {
+
           const res = await axios.get(serverLogin, {
             headers: {
               authorization: `bearer ${tokenLogin}`,
               'Content-Type': 'application/json',
             },
           });
-  
+          console.log(res.data);
           const code = res.data.code;
-        if (code === 200) 
-        {
-             setIsChangePass(false);
+          if (code === 200) 
+          {
+                        
+          } 
+          else if (code === 203) 
+          {
+            handleChange()
+          }
+          else 
+          {
           
-        } 
-        else if (code === 203) 
-        {
-        setIsChangePass(true);
-        }
-        else 
-        {
-            setIsChangePass(false);
-            console.log("Router: ", isChangePass);
-        }
-        } catch (err) {
-          console.log("Error at 'Home' fetch verify token: ", err);
-        }
+          }
+          } catch (err) {
+            console.log("Error at 'Home' fetch verify token: ", err);
+          }
       };
   
        fetchData();
     }, []);
 
+    function handleChange() {
+      dispatch({ type: "IS_CHANGE_PASS", payload: true });
+    }
     // console.log( "isChangePass at router: ", isChangePass);
     return (
         <>
            
             <Routes>
                 <Route path="/" element={<LayoutPage />}>
-                    <Route index element={<Home  isChangePass={isChangePass}/>} />
-                    <Route path="home" element={<Home  isChangePass={isChangePass}/>} />
+                    <Route index element={<Home  />} />
+                    <Route path="home" element={<Home />} />
                 </Route>          
 
                 {/* <Route path="/account" element={<LayoutPage />} > */}

@@ -1,7 +1,17 @@
 import React from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link  } from "react-router-dom";
+
+const _Token_Auth = process.env.REACT_APP_AUTH_LOGIN || 'TOKEN_AUTH_LOGIN';
 
 const HeaderNav =  () =>{
+
+    const LogOut = () =>{
+        if(localStorage.getItem(_Token_Auth))
+        {
+            localStorage.removeItem(_Token_Auth)
+            window.location.href= '/account/login'
+        }
+    }
     return(
         <>
              <nav>
@@ -12,7 +22,9 @@ const HeaderNav =  () =>{
                     <li>
                         <Link to="/account">Account</Link>
                     </li>
-               
+                    <li>
+                       <button onClick={LogOut}>Đăng Xuất</button>
+                    </li>
                 </ul>
             </nav>           
         </>

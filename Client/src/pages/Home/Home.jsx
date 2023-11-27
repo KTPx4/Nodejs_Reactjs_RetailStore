@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Card from 'react-bootstrap/Card';
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 
 import FirtLogin from '../../components/FirstLogin/index';
@@ -13,10 +14,10 @@ const _Root_IMG = __dirname + "img/home";
 
 const HomePage = (props) =>{
 
-   // const isChangePass =  props.location?.state.isChangePass || props.isChangePass || false;
-    const location = useLocation();
-    const isChangePass = location.state?.isChangePass ;
-    //alert(props.location?.state.isChangePass)
+  
+
+    let isChangePass = useSelector((state) => state.isChangePass);
+
     console.log("Page Home :", isChangePass );
     useEffect(() =>{
         
@@ -30,6 +31,7 @@ const HomePage = (props) =>{
         document.head.appendChild(link);
     }, [])
 
+    
 
     let ModalChangePass = <></>
     if(isChangePass)
