@@ -11,18 +11,23 @@ const Auth = require('../middlewares/Account/Auth')
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}))
 
-app.get('/', AccountController.GetAll)
 
-app.get('/active',AccountValidator.InputActive,  AccountController.Active)
+app.get('/', Auth.AuthRoleAmin, AccountController.GetAll)
+
+app.get('/active', AccountValidator.InputActive,  AccountController.Active)
 
 app.post('/login', AccountValidator.InputLogin, AccountController.Login);
+app.get('/login', AccountController.VerifyLogin) // verify token login 
 
-app.post('/register',AccountValidator.InputRegister, AccountController.Register)
-
+app.post('/register',  Auth.AuthRoleAmin, AccountValidator.InputRegister, AccountController.Register)
 
 app.post('/changepassword',Auth.AuthAccount, AccountValidator.InputChangePass, AccountController.ChangePassword)
 
 app.post('/sendactive', Auth.AuthRoleAmin, AccountValidator.InputSendAcitve, AccountController.CreateActive)
+
+
+
+
 
 app.post('/testToken', async(req, res)=>{
     let {token} = req.body
@@ -46,6 +51,5 @@ app.post('/testToken', async(req, res)=>{
   
 })
 
-app.get('/login', AccountController.VerifyLogin) // verify token login 
 
 module.exports = app

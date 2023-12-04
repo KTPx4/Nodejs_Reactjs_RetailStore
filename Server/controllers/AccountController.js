@@ -3,9 +3,11 @@ const { sendTestEmail } = require("../modules/mailer");
 const bcrypt = require('bcrypt')
 
 // Variable
-const SERVER = process.env.SERVER || 'http://localhost:3000' 
+const SERVER_CLIENT = process.env.SERVER_CLIENT || 'http://localhost:3000' 
 const SECRET_ACTIVE = process.env.TOKEN_ACTIVE_ACCOUNT || 'token-active-account';
 const SECRET_LOGIN = process.env.TOKEN_LOGIN_ACCOUNT || 'token-login-account';
+
+
 
 //model
 const AccountModel = require('../models/AccountModel')
@@ -69,7 +71,8 @@ module.exports.Login = async(req, res) =>{
     })
     .then(()=>{
         // store jwt login
-       
+        req.User = accountUser;
+
         let data = {
             email: accountUser.Email,
             role: accountUser.Role
@@ -83,7 +86,9 @@ module.exports.Login = async(req, res) =>{
                     code: 203,
                     message: 'Đăng nhập thành công',
                     data: {
-                        token: tokenLogin
+                        token: tokenLogin,
+                        email: accountUser.Email,
+                        role: accountUser.Role
                     }
                 })
             }
@@ -93,7 +98,9 @@ module.exports.Login = async(req, res) =>{
                     code: 200,
                     message: 'Đăng nhập thành công',
                     data: {
-                        token: tokenLogin
+                        token: tokenLogin,
+                        email: accountUser.Email,
+                        role: accountUser.Role
                     }
                 })
             }
@@ -114,7 +121,8 @@ module.exports.Register = async(req, res)=>{
     let {email, fullName} = req.body
     let role = req.body.role || "User"
     let isActive = role.includes("Admin") ? true : false;
-
+    let fLogin = role.includes("Admin") ? false : true;
+    
     //console.log("email:::: ", email);  
 
     let UserName = email.split("@")[0];
@@ -131,19 +139,20 @@ module.exports.Register = async(req, res)=>{
                 Password: hashed,
                 User: UserName || email,
                 Role: role,
-                isActive: isActive
+                isActive: isActive,
+                firstLogin: fLogin
             });
 // send email
             const data = {
                 email: Account.Email
             }
-            const expiresIn = '1m';
-            token = jwt.sign(data, SECRET_ACTIVE, { expiresIn }); // token auth account
+       
+            token = jwt.sign(data, SECRET_ACTIVE, { expiresIn:  '1m'}); // token auth account
             
             const subject = "Active Account";
             const html = `
               <p>Hí bạn ${email},</p>
-              <p>Vui lòng kích hoạt tài khoản của bạn <a href="${SERVER}/api/account/active?email=${email}&token=${token}" >Tại đây</a> </p>
+              <p>Vui lòng kích hoạt tài khoản của bạn <a href="${SERVER_CLIENT}/account/active?token=${token}" >Tại đây</a> </p>
               <strong>Liên Kết sẽ hết hạn trong 1 phút, vui lòng nhanh cái tay lên ^^</strong>
               <p>Thank you</p>
               `;
@@ -186,7 +195,7 @@ module.exports.Register = async(req, res)=>{
 module.exports.Active = async(req, res)=>{
     // let email =req.query.email || req.body.email 
     let token = req.query.token || req.body.token
-
+    
     jwt.verify(token, SECRET_ACTIVE, async(err, data) => {
         if (err) 
             return res.json({
@@ -195,14 +204,23 @@ module.exports.Active = async(req, res)=>{
         });
      
         let email = data.email
-        await AccountModel.findOneAndUpdate({Email: email}, {isActive: true})
+        let tokenLogin = ''
+        let body = {
+            email: email
+        }
+      
+        tokenLogin = await jwt.sign(body, SECRET_LOGIN, {expiresIn: '5m'})
+        req.User = data
+
+        await AccountModel.findOneAndUpdate({Email: email}, {isActive: true, firstLogin: true})
         .then(()=>{
             
             return res.json({
                 code: 200,
                 message: "Kích Hoạt tài khoản thành công",
                 data: {
-                    email: data.email
+                    email: data.email,
+                    token: tokenLogin
                 }
             })
         })
@@ -227,13 +245,13 @@ module.exports.CreateActive = async(req, res)=>{
         const data = {
             email: email
         }
-        const expiresIn = '1m';
-        token = jwt.sign(data, SECRET_ACTIVE, { expiresIn }); // token auth account
+    
+        token = jwt.sign(data, SECRET_ACTIVE, { expiresIn: '1m' }); // token auth account
         
         const subject = "Active Account";
         const html = `
           <p>Hí bạn ${email},</p>
-          <p>Vui lòng kích hoạt tài khoản của bạn <a href="${SERVER}/api/account/active?email=${email}&token=${token}" >Tại đây</a> </p>
+          <p>Vui lòng kích hoạt tài khoản của bạn <a href="${SERVER_CLIENT}/account/active?token=${token}" >Tại đây</a> </p>
           <strong>Liên Kết sẽ hết hạn trong 1 phút, vui lòng nhanh cái tay lên ^^</strong>
           <p>Thank you</p>
           `;
@@ -357,17 +375,28 @@ module.exports.VerifyLogin = async (req, res) =>{
                 message: 'Không tìm thấy tài khoản'
             })   
         }
+
         if(acc.firstLogin)
         {
             return res.json({
                 code: 203,
-                message:"Đăng nhập thành công"
+                message:"Đăng nhập thành công",
+                data:
+                {
+                    email: acc.Email,
+                    role: acc.Role
+                }
             })
         }
             
         return res.json({
             code: 200,
-            message: 'Đã Đăng Nhập'
+            message: 'Đã Đăng Nhập',
+            data:
+            {
+                email: acc.Email,
+                role: acc.Role
+            }
         })
     }) 
 }
