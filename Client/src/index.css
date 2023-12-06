@@ -1,19 +1,33 @@
 
-body {
+body 
+{
     margin: 0;
     padding: 0;
     font-family: "Arial", sans-serif;
 }
   
-.layout-container {
-display: flex;
-flex-direction: column;
-height: 100vh;
+html{
+    /* overflow: hidden ; */
+}
+
+.layout-container 
+{
+    /* display: flex;
+    flex-direction: column;
+    */
+    
+    /* height: 100px; */
+    /* overflow-y: scroll; */
 }
 
 
 .layout-body {
-flex-grow: 1;
-min-height: 70vh; /* Đặt giá trị min-height mong muốn */
-padding: 20px; /* Thêm padding để tránh nội dung bị giữ chật vào mép */
+    /* overflow-y: scroll !important; */
+    /* height: fit-content; */
+    /* max-height: 600px; */
+    min-height: 700px;
+    /* flex-grow: 1; */
+    /* Đặt giá trị min-height mong muốn */
+    /* min-height: 50vh;  */
+    /* padding: 20px; Thêm padding để tránh nội dung bị giữ chật vào mép */
 }
