@@ -21,18 +21,20 @@ const HeaderNav =  () =>{
     }
 
     const isAdmin = useSelector((state)=> state.isAdmin)
+
     let DIManagerAccount = <></>
-   console.log("nav: isad:", isAdmin); 
+    
+    
 
     if(isAdmin)
     {
-        DIManagerAccount = (<NavDropdown.Item href="/account/admin">Quản Lý Tài Khoản</NavDropdown.Item>)
+      DIManagerAccount = (<NavDropdown.Item href="/account/admin">Quản Lý Tài Khoản</NavDropdown.Item>)
     }
 
     let expand = "sm"
     return (
       
-        <Navbar
+      <Navbar
           sticky="top"
           key={expand}
           expand={expand}
@@ -40,12 +42,12 @@ const HeaderNav =  () =>{
           
         >
             <Container fluid sticky="top">
-              <Navbar.Brand href="/">Final Nodejs</Navbar.Brand>
+          
               <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
               <Navbar.Offcanvas
                 id={`offcanvasNavbar-expand-${expand}`}
                 aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
-                placement="end"
+                placement="top"
               >
                 <Offcanvas.Header closeButton>
                   <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
@@ -53,7 +55,7 @@ const HeaderNav =  () =>{
                   </Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
-                  <Nav className="justify-content-end flex-grow-1 pe-3">                    
+                  <Nav className="justify-content-center flex-grow-1 pe-3">                    
                     
                     <NavDropdown 
                       title="Tài Khoản"
@@ -70,9 +72,9 @@ const HeaderNav =  () =>{
                     </NavDropdown>
 
                     <Nav.Link href="/">Sản Phẩm</Nav.Link>
-
+                    <Button variant="outline-info" onClick={LogOut}>Đăng Xuất</Button>
                   </Nav>
-                  <Button variant="outline-info" onClick={LogOut}>Đăng Xuất</Button>
+                
                  
                 </Offcanvas.Body>
               </Navbar.Offcanvas>

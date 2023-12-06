@@ -125,6 +125,13 @@ module.exports.InputChangePass = async (req, res, next) =>{
             message: "Vui lòng nhập mật khẩu mới"
         })
     }
+    if(newPassword.length < 5)
+    {
+        return res.json({
+            code: 400,
+            message: "Vui lòng nhập mật khẩu ít nhất 5 ký tự"
+        })
+    }
     next()
 
 }

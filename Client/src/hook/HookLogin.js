@@ -8,6 +8,7 @@ const tokenLogin = localStorage.getItem(_Token_Auth) || '';
 const serverLogin = `${_URLServer}/api/account/login`;
 
 export function useVerifyLogin() {
+  
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -22,20 +23,21 @@ export function useVerifyLogin() {
 
         const code = res.data.code;
      
-        if (code === 203) 
-        {
-          dispatch({ type: 'IS_CHANGE_PASS', payload: true });
-        }
-        else if(code === 400)
+       
+        if(code === 400)
         {
           window.location.replace('/account/login')
         }
-        else if(code === 200)
+        else if(code === 200 || code === 203)
         {
           let role = res.data.data.role
           if(role.includes("Admin"))
           {
             dispatch({ type: "IS_ADMIN", payload: true });
+          }
+          if (code === 203) 
+          {
+            dispatch({ type: 'IS_CHANGE_PASS', payload: true });
           }
         }
 
