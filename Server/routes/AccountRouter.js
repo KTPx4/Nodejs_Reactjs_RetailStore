@@ -21,10 +21,11 @@ app.get('/login', AccountController.VerifyLogin) // verify token login
 
 app.post('/register',  Auth.AuthRoleAmin, AccountValidator.InputRegister, AccountController.Register)
 
-app.post('/changepassword',Auth.AuthAccount, AccountValidator.InputChangePass, AccountController.ChangePassword)
+app.post('/changepassword', Auth.AuthAccount, AccountValidator.InputChangePass, AccountController.ChangePassword)
 
 app.post('/sendactive', Auth.AuthRoleAmin, AccountValidator.InputSendAcitve, AccountController.CreateActive)
 
+app.put('/profile', Auth.AuthAccount, AccountValidator.UpdateProfile)
 
 
 

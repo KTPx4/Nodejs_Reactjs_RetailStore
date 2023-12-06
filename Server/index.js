@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const  mongoose = require('mongoose')
 const cors = require('cors')
+const multer = require('multer')
+
 require('dotenv').config()
 
 
@@ -11,8 +13,16 @@ const AccountRouter = require('./routes/AccountRouter')
 const port = process.env.PORT || 3000
 
 app.use(cors())
+app.use(express.static('public'))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+const uploader = multer({dest: __dirname +'/uploads/'})
+
+app.use((req, res, next)=>{
+    req.vars = {root: __dirname}
+    next()
+ })
+
 
 app.use('/api', HomeRouter)
 app.use('/api/account', AccountRouter)

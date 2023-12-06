@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken');
 const { sendTestEmail } = require("../modules/mailer");
 const bcrypt = require('bcrypt')
+const fs = require('fs');
 
 // Variable
 const SERVER_CLIENT = process.env.SERVER_CLIENT || 'http://localhost:3000' 
 const SECRET_ACTIVE = process.env.TOKEN_ACTIVE_ACCOUNT || 'token-active-account';
 const SECRET_LOGIN = process.env.TOKEN_LOGIN_ACCOUNT || 'token-login-account';
-
 
 
 //model
@@ -74,10 +74,19 @@ module.exports.Login = async(req, res) =>{
         req.User = accountUser;
 
         let data = {
+            fullName: accountUser.fullName,
             email: accountUser.Email,
-            role: accountUser.Role
+            role: accountUser.Role,
+            id: accountUser._id
         }
-        jwt.sign(data, SECRET_LOGIN, {expiresIn: '1h'}, (err, tokenLogin)=>{
+
+        // create folder store avatar - name avt and folder -> id of user
+        if(!createFolder(req, res, accountUser._id))
+        {
+            console.log("Can't create folder for UserID: ", Account._id);
+        }
+
+        jwt.sign(data, SECRET_LOGIN, {expiresIn: '5h'}, (err, tokenLogin)=>{
             if(err) throw err
             
             if(accountUser.firstLogin)
@@ -142,11 +151,18 @@ module.exports.Register = async(req, res)=>{
                 isActive: isActive,
                 firstLogin: fLogin
             });
-// send email
+
+            // create folder store avatar - name avt and folder -> id of user
+            if(!createFolder(req, res, Account._id))
+            {
+                console.log("Can't create folder for UserID: ", Account._id);
+            }
+           
+         
+            // send email
             const data = {
                 email: Account.Email
             }
-       
             token = jwt.sign(data, SECRET_ACTIVE, { expiresIn:  '1m'}); // token auth account
             
             const subject = "Active Account";
@@ -161,6 +177,7 @@ module.exports.Register = async(req, res)=>{
          
         })
         .then(()=>{
+
             return res.json({
                 code: 200,
                 message: "Đăng ký tài khoản Thành Công. Vui lòng vào email kích hoạt tài khoản!\nLiên kết sẽ hết hạn sau 1 phút.",
@@ -402,6 +419,35 @@ module.exports.VerifyLogin = async (req, res) =>{
 }
 
 
+const createFolder = (req, res, idUser)=>
+{
+    const {root} = req.vars
+    const ROOT_AVT = root + "/public/account"
 
+ 
+    let folderAccount = ROOT_AVT + "/" + idUser           
+    let defaultAvt = `${ROOT_AVT}/Blank_Avatar.png`
+    let UserAvt = `${ROOT_AVT}/${idUser}/${idUser}.png`
+
+    try
+    {
+        if (!fs.existsSync(folderAccount)) 
+        {               
+            fs.mkdirSync(folderAccount);   
+        }
+
+        if(!fs.existsSync(UserAvt) && fs.existsSync(defaultAvt))
+        {
+            fs.copyFileSync(defaultAvt, UserAvt)
+        }
+    }
+    catch(err)
+    {
+        console.log("Error at AccounController - Create Folder Img For User: ", err);
+        return false;
+    }
+    return true;
+    // Kiểm tra xem tệp tin nguồn tồn tại hay không
+}
 
 

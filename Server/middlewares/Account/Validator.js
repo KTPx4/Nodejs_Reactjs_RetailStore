@@ -163,3 +163,7 @@ module.exports.InputSendAcitve = async (req, res, next) =>
 
     
 }
+
+module.exports.UpdateProfile = async(req, res, next)=>{
+    
+}
