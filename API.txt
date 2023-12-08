@@ -28,3 +28,7 @@
 		Authentication: header / body->token (params token in body)
 		Method: POST
 		Body: {email}
+
+	+ '/profile' : Update Profile
+		Method: PUT
+		Content-Type: 'multipart/form-data'

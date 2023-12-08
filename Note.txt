@@ -1,0 +1,2 @@
+Hạn Chế ở Server:
+ - Khi chỉnh sửa profile chỉ cần token đăng nhập và email, chứ chưa phân role Admin có thể chỉnh sửa all profile - nên bất kì ai đăng nhập xong, chỉ cần nhập email người khác là có thể chỉnh sửa profile của người đó nếu dùng công cụ test api

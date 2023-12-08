@@ -26,8 +26,8 @@ const ActivePage = () => {
     let url = ServerActive + `?token=${token}`;
 
     if (token) {
+    
       VeryfiActive(url);
-
     }
 
 
@@ -60,21 +60,27 @@ const ActivePage = () => {
     await axios
       .get(url)
       .then((res) => {
-        let code = res.data.code;
-
-        if (code === 200) {
+        console.log(res);
+        let code = res.data.code;     
+    
+        if (code === 200) 
+        {
+          let token = res.data.data.token
+          localStorage.setItem(_Token_Auth, token)
           setAlert(success);
         } else {
           setAlert(falled);
         }
       })
-      .catch((err) => {
+      .catch((err) => 
+      {
         console.log(err);
         return 400;
       });
   };
 
   textReload = <p>Trang chủ tự động tải sau <strong>{countdown}s</strong></p>
+
   const success = (
     <Alert show={true} variant="success" className="text-center">
       <Alert.Heading>Kích Hoạt Tài Khoản Thành Công</Alert.Heading>

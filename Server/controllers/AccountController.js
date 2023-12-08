@@ -10,7 +10,8 @@ const SECRET_LOGIN = process.env.TOKEN_LOGIN_ACCOUNT || 'token-login-account';
 
 
 //model
-const AccountModel = require('../models/AccountModel')
+const AccountModel = require('../models/AccountModel');
+const { log } = require('console');
 
 
 // "web": {
@@ -72,16 +73,17 @@ module.exports.Login = async(req, res) =>{
     .then(()=>{
         // store jwt login
         req.User = accountUser;
-
+        const {root} = req.vars
         let data = {
             fullName: accountUser.fullName,
             email: accountUser.Email,
             role: accountUser.Role,
-            id: accountUser._id
+            id: accountUser._id,
+            avt: accountUser.NameAvt
         }
-
+// console.log("Name Avt - Login Controller,",accountUser.NameAvt);
         // create folder store avatar - name avt and folder -> id of user
-        if(!createFolder(req, res, accountUser._id))
+        if(!createFolder(root, accountUser._id, accountUser.NameAvt))
         {
             console.log("Can't create folder for UserID: ", Account._id);
         }
@@ -137,6 +139,7 @@ module.exports.Register = async(req, res)=>{
     let UserName = email.split("@")[0];
     let Password = UserName || '12345'
     let token = ''
+    const {root} = req.vars
     try{
 
         bcrypt.hash(Password, 10)
@@ -153,7 +156,7 @@ module.exports.Register = async(req, res)=>{
             });
 
             // create folder store avatar - name avt and folder -> id of user
-            if(!createFolder(req, res, Account._id))
+            if(!createFolder(root, Account._id, Account.NameAvt))
             {
                 console.log("Can't create folder for UserID: ", Account._id);
             }
@@ -212,26 +215,38 @@ module.exports.Register = async(req, res)=>{
 module.exports.Active = async(req, res)=>{
     // let email =req.query.email || req.body.email 
     let token = req.query.token || req.body.token
-    
+    let body = {}
+    let tokenLogin = ''
     jwt.verify(token, SECRET_ACTIVE, async(err, data) => {
         if (err) 
+        {
+           // throw new Error('Liên kết đã hết hạn hoặc chưa đúng!');
             return res.json({
                 code: 400,
                 message: "Kích hoạt Tài khoản thất bại hoặc liên kết đã hết hạn!"
-        });
+            })
+        }
      
         let email = data.email
-        let tokenLogin = ''
-        let body = {
-            email: email
-        }
+       
       
-        tokenLogin = await jwt.sign(body, SECRET_LOGIN, {expiresIn: '5m'})
-        req.User = data
+      
 
-        await AccountModel.findOneAndUpdate({Email: email}, {isActive: true, firstLogin: true})
-        .then(()=>{
+        await AccountModel.findOneAndUpdate({Email: email}, {isActive: true, firstLogin: true}, {new: true})
+        .then(async(accountUser)=>{
             
+            body = {
+                fullName: accountUser.fullName,
+                email: accountUser.Email,
+                role: accountUser.Role,
+                id: accountUser._id,
+                avt: accountUser.NameAvt
+            }
+            
+            tokenLogin = await jwt.sign(body, SECRET_LOGIN, {expiresIn: '5h'})
+            
+            req.User = accountUser
+
             return res.json({
                 code: 200,
                 message: "Kích Hoạt tài khoản thành công",
@@ -306,9 +321,18 @@ module.exports.CreateActive = async(req, res)=>{
   
 }
 module.exports.ChangePassword = async (req, res) => {
+    
     try {
+        if(!req.User)
+        {
+            return res.json({
+                code: 401,
+                message: 'Vui lòng đăng nhập bằng chức năng login'
+            })
+        }
         let { oldPassword, newPassword } = req.body;
-        let email = req.User.email;
+       
+        let email = req.User.Email;
 
         const account = await AccountModel.findOne({ Email: email });
 
@@ -401,7 +425,10 @@ module.exports.VerifyLogin = async (req, res) =>{
                 data:
                 {
                     email: acc.Email,
-                    role: acc.Role
+                    role: acc.Role,
+                    fullName: acc.fullName,                  
+                    id: acc._id,
+                    avt: acc.NameAvt
                 }
             })
         }
@@ -412,22 +439,103 @@ module.exports.VerifyLogin = async (req, res) =>{
             data:
             {
                 email: acc.Email,
-                role: acc.Role
+                role: acc.Role,
+                fullName: acc.fullName,                  
+                id: acc._id,
+                avt: acc.NameAvt
             }
         })
     }) 
 }
 
+module.exports.UpdateProfile = async (req, res) =>{
+    let tokenFromHeader =(req.header('Authorization'))
+    let token = undefined
+    let Account= undefined
+    let {root}  = req.vars
+    let {fullName, newPass, email} = req.body
 
-const createFolder = (req, res, idUser)=>
+    Account = await AccountModel.findOne({Email: email})
+    
+    if(!Account)
+    {
+        return res.json({
+            code: 401,
+            message: 'Tài khoản vừa bị xóa. Không thể cập nhật.'
+        })
+    }   
+   
+    let newPassHash = undefined
+    let id = Account._id
+    let data = undefined
+  
+    try
+    {
+       // console.log("Log at update profile - file: ", req.file);
+        if(newPass)
+        {
+           newPassHash = await bcrypt.hash(newPass, 10)
+        }
+        let newNameAVT = await upLoadAvt(req.file, root,  Account)
+      //  console.log("Name new avt: ",newNameAVT);
+        let account = await AccountModel.findOneAndUpdate({_id: id}, {
+            fullName: fullName,
+            Password: newPassHash,
+            NameAvt: newNameAVT                
+        }, {new: true})
+      
+        data = {
+            fullName: fullName,
+            email: account.Email,
+            role: account.Role,
+            id: account._id,
+            avt: account.NameAvt
+        }    
+       
+        let token = await jwt.sign(data, SECRET_LOGIN, {expiresIn: '5h'});
+       
+        return res.json({
+            code: 200,
+            message: 'Thay đổi thông tin thành công',
+            data: {
+                token: token,
+                email: data.Email,
+                role: data.Role
+            }
+        })      
+    }
+    catch(err)
+    {
+        console.log("Error At Account Contronller - UpdateProfile: ", err.message);
+        return res.json({
+                    code: 400,
+                    message: "Không thể cập nhật thông tin",
+                  
+        })
+    }
+ 
+
+}
+
+
+module.exports.GetAllProfile = (req, res) =>{
+
+}
+module.exports.GetProfileByID = (req, res) =>
 {
-    const {root} = req.vars
+
+}
+
+const createFolder = (root, idUser, nameAvt)=>
+{
+ 
     const ROOT_AVT = root + "/public/account"
 
- 
-    let folderAccount = ROOT_AVT + "/" + idUser           
     let defaultAvt = `${ROOT_AVT}/Blank_Avatar.png`
-    let UserAvt = `${ROOT_AVT}/${idUser}/${idUser}.png`
+ 
+    let folderAccount = ROOT_AVT + "/" + idUser  
+
+    let UserAvt = `${ROOT_AVT}/${idUser}/${nameAvt}`
 
     try
     {
@@ -438,6 +546,7 @@ const createFolder = (req, res, idUser)=>
 
         if(!fs.existsSync(UserAvt) && fs.existsSync(defaultAvt))
         {
+           // console.log("ok, ", UserAvt);
             fs.copyFileSync(defaultAvt, UserAvt)
         }
     }
@@ -450,4 +559,39 @@ const createFolder = (req, res, idUser)=>
     // Kiểm tra xem tệp tin nguồn tồn tại hay không
 }
 
+const upLoadAvt =async (file, root, AccUser)=>{
+       //console.log("Upload Avt call");
+    let id = AccUser._id
+    
+    const currentPath = `${root}/public/account/${id}`
+
+    if(file)
+    {
+        if(!fs.existsSync(currentPath))
+        {
+            fs.mkdir(currentPath, (error) => 
+            { 
+                if (error) 
+                {
+                    console.log("Error at create Folder Upload: ", error.message);    
+                }
+            });
+        }
+   //     console.log(file);
+  
+        let name = file.originalname
+        let temp = name.split('.')
+        let extension = temp[temp.length - 1]
+       // let nameImg = temp.slice(0, -1).join('.')
+
+        let newFilePath = currentPath + '/' +  `${id}.${extension}`
+
+        fs.renameSync(file.path, newFilePath)
+
+        return `${id}.${extension}`
+    }
+
+    return undefined
+   
+}
 

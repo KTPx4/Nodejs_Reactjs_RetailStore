@@ -1,6 +1,7 @@
 const emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
 const validator = require('email-validator');
 const AccountModel = require('../../models/AccountModel')
+const bcrypt = require('bcrypt')
 
 module.exports.InputLogin = (req, res, next)=>{
     let {user, password} = req.body
@@ -164,6 +165,84 @@ module.exports.InputSendAcitve = async (req, res, next) =>
     
 }
 
-module.exports.UpdateProfile = async(req, res, next)=>{
+module.exports.UpdateProfile = async(req, res, next)=>
+{
+    let {fullName, oldPass, newPass, email} = req.body
+    //console.log(fullName);
+    if(!fullName)
+    {
+        return res.json({
+            code: 400,
+            message: "Vui lòng nhập đầy đủ họ tên"
+        })
+    }
+    else if(!email)
+    {
+        return res.json({
+            code: 400,
+            message: "Vui lòng cung cấp email người cần chỉnh sửa profile"
+        })
+    }
+    else if(newPass && !oldPass)
+    {
+        return res.json({
+            code: 400,
+            message: "Vui lòng nhập mật khẩu cũ"
+        })
+    }
+    else if(!newPass && oldPass)
+    {
+        return res.json({
+            code: 400,
+            message: "Vui lòng nhập mật khẩu mới"
+        })
+    }
+    else if(newPass && oldPass && newPass.length < 5)
+    {
+        return res.json({
+            code: 400,
+            message: "Vui lòng nhập mật khẩu mới ít nhất 5 ký tự"
+        })
+    }
+    else if(newPass && oldPass)
+    {
+        Account = await AccountModel.findOne({Email: email})
     
+        if(!Account)
+        {
+            return res.json({
+                code: 401,
+                message: 'Tài khoản vừa bị xóa. Không thể cập nhật.'
+            })
+        }   
+    //    console.log(oldPass, Account);
+        await bcrypt.compare(oldPass, Account.Password)
+        .then(PassMatch=>{
+            if(!PassMatch)
+            { 
+                throw new Error('Mật khẩu không đúng')
+                // return res.json({
+                //     code: 400,
+                //     message: "Mật khẩu cũ không đúng"
+                // })
+            }    
+            else
+            {
+                return next()
+            }  
+        })
+        .catch(err=> {
+            //console.log("Error At Validator Account: ", err)
+            return res.json({
+                code: 400,
+                message: "Lỗi khi cập nhật: " + err.message
+            })
+        })
+    }
+    else {
+        return next()
+    }
+   
+   
+
 }

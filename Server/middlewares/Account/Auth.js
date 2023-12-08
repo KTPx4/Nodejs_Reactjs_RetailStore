@@ -41,7 +41,7 @@ const authAccount =  (req, res, next) =>{
             })
         }
 
-        req.User = data
+        req.User = account
         return next()
     }) 
   
@@ -51,8 +51,8 @@ const authAccount =  (req, res, next) =>{
 const authRoleAmin = async(req, res, next)=>{
     
     await authAccount(req, res, async()=>{
-        console.log(req.User);
-        let emailAccount = req.User.email || '' // get from auth 
+       // console.log(req.User);
+        let emailAccount = req.User.Email || '' // get from auth 
     
         let code =400
         let error  = ''

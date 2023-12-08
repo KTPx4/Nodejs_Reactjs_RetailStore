@@ -2,7 +2,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import React, { useEffect, useState } from "react";
 import {Alert,  Modal, Button, Form, Image } from "react-bootstrap";
 import { jwtDecode } from 'jwt-decode';
-
+import axios from "axios";
 
 const _Token_Auth = process.env.REACT_APP_AUTH_LOGIN || 'TOKEN_AUTH_LOGIN';
 const _SECRET_KEY_LOGIN = process.env.REACT_APP__SECRET_KEY_LOGIN || 'token-login-account'
@@ -28,9 +28,10 @@ function ProfileModal() {
   const [ButtonPass, setButtonPass] = useState(<></>);
 
   const [isLoading, setLoading] = useState(false)
+  const [urlServer, setUrlServer] = useState(process.env.REACT_APP_SERVER || 'http://localhost:3001');
   const [selectedImage, setSelectedImage] = useState('/img/account/3.jpg');
-
-
+  const [file, setFile] = useState(null)
+  const [email, setEmail] = useState('')
   useEffect(() => {
     setButtonPass(
       <>
@@ -45,20 +46,24 @@ function ProfileModal() {
     
     const decoded = jwtDecode(token);
     let fullName = decoded.fullName
+    let idUser = decoded.id
+    let avt = decoded.avt
+    setEmail(decoded.email)
+    setSelectedImage(`${urlServer}/images/account/${idUser}/${avt}`)
     setFullName(fullName)
   }, []);
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-
-    if (file) {
+    const f = e.target.files[0];
+    setFile(f);
+    if (f) {
       const reader = new FileReader();
 
       reader.onloadend = () => {
         setSelectedImage(reader.result);
       };
      
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(f);
     }
   };
 
@@ -93,34 +98,88 @@ function ProfileModal() {
   };
 
   const handleSave = () => {
+   // console.log(fullName);
     if(!fullName)
     {
         setError('Vui lòng nhập đầy đủ họ tên')
         return;
     }
+    let formData = new FormData();
+    formData.append("fullName", fullName);
+    formData.append("email", email);
+
+    if(file !== null)
+    {
+     // console.log("Not null file: ", file);
+      formData.append("avt", file);
+    }
     if(isChangePass)
     {
-        if(!oldPass)
-        {
-            setError('Vui lòng nhập mật khẩu cũ')
-            return;
-        }
-        
-        if(!newPass)
-        {
-            setError('Vui lòng nhập mật khẩu mới')
-            return;
-        }
-    
-        if(confirmPass != newPass)
-        {
-            setError('Mật khẩu mới và xác nhận mật khẩu không khớp')
-            return;
-        }
+      if(!oldPass)
+      {
+          setError('Vui lòng nhập mật khẩu cũ')
+          return;
+      }
+      
+      if(!newPass)
+      {
+          setError('Vui lòng nhập mật khẩu mới')
+          return;
+      }
+  
+      if(confirmPass != newPass)
+      {
+          setError('Mật khẩu mới và xác nhận mật khẩu không khớp')
+          return;
+      }
+      formData.append("oldPass", oldPass);
+      formData.append("newPass", newPass);
+      
     }
- 
+
+
+    const tokenLogin = localStorage.getItem(_Token_Auth) || '';
+    let serverLogin = `${urlServer}/api/account/profile`;
    
-    // setLoading(true)
+   
+    setLoading(true)
+    setTimeout(async()=>{
+      await axios({
+          url: serverLogin,
+          method: 'PUT',
+          headers: {
+              authorization: `bearer ${tokenLogin}`,
+              "Content-Type": 'multipart/form-data' // token auth login,
+              
+          },
+          data: formData
+      })
+      .then((res) => {
+
+          let code = res.data.code;
+          let message = res.data.message;
+        
+          setLoading(false)
+          if (code === 400) 
+          {
+              setError(message);
+          } 
+          else if(code === 500)
+          {
+              setError("Không Thể Kết Nối Đến Server");
+          }
+          else if (code === 200) 
+          { 
+            localStorage.setItem(_Token_Auth, res.data.data.token)
+            setError('');
+            window.location.reload();
+          }
+      })
+      .catch((err) => {
+          console.log("Error at login fetch: ", err);
+          setError('Lỗi Khi Kết Nối Server');
+      });
+  }, 1800)
   };
 
   const ClearError = ()=>{
@@ -152,7 +211,6 @@ function ProfileModal() {
               <div className="text-center">
                 <label htmlFor="imageInput">
                     <Image src={selectedImage}  className="img" /> 
-
                 </label>
                 <input
                     id="imageInput"
@@ -163,13 +221,8 @@ function ProfileModal() {
                 ></input>
               </div>
               <br />
-
-              {/* <Form.Control type="file" onChange={handleImageUpload} /> */}
             </Form.Group>
-            <Form.Group>
-              {/* <Form.Label>Họ và Tên</Form.Label> */}
-
-              {/* value={fullName} */}
+            <Form.Group>         
               <Form.Control
               placeholder="Họ và Tên"
               className="text-center"
