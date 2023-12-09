@@ -16,9 +16,10 @@ import Home from "../pages/Home/Home";
 import ProfilePage from "../pages/Account/User/Profile";
 import AdminPage from "../pages/Account/Admin";
 import LoginPage from "../pages/Account/User/Login";
-
+import ErrorPage from "../pages/Error";
 import ActivePage from "../pages/Account/User/Active";
 
+import TestPage from "../pages/TestPage";
 
 import { useVerifyLogin } from "../hook/HookLogin";
 
@@ -36,6 +37,10 @@ const AppRoutes = (props) => {
         <Route path="/" element={<UserRouter><LayoutPage /></UserRouter>}>
           <Route index element={<Home />} />
           <Route path="home" element={<Home />} />
+        </Route>
+        <Route path="/error" element={<ErrorPage/>}/>
+        <Route path="/TestPage" element={<LayoutPage />}>
+          <Route index element={<TestPage/>}></Route>
         </Route>
 
         <Route path="/account/login" element={<LoginPage />} />

@@ -20,10 +20,11 @@ import ForbiddenPage from "../pages/Account/Forbidden";
         try 
         {
           // console.log(tokenLogin);
+          // console.log(serverLogin);
           const res = await VerifyLogin(serverLogin, tokenLogin);
           let code = res.code;
 
-          console.log(res);
+          // console.log(res);
           if (code !== 200 && code !== 203 && code !== 500) 
           {
            

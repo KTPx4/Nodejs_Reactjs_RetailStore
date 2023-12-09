@@ -14,7 +14,10 @@ const Auth = require('../middlewares/Account/Auth')
 // app.use(bodyParser.urlencoded({extended: true}))
 
 
+// Khi Đăng nhập đã gửi đầy đủ thông tin có thể được tương tác qua token cho user rồi nên không viết api cho user lấy profile nửa
 app.get('/', Auth.AuthRoleAmin, AccountController.GetAll)
+app.get('/profile/:id',  Auth.AuthRoleAmin, AccountController.GetProfileByID) // Dùng Cho Admin khi load dashboard
+
 
 app.get('/active', AccountValidator.InputActive,  AccountController.Active)
 
@@ -26,10 +29,6 @@ app.post('/register',  Auth.AuthRoleAmin, AccountValidator.InputRegister, Accoun
 app.post('/changepassword', Auth.AuthAccount, AccountValidator.InputChangePass, AccountController.ChangePassword)
 
 app.post('/sendactive', Auth.AuthRoleAmin, AccountValidator.InputSendAcitve, AccountController.CreateActive)
-
-// Khi Đăng nhập đã gửi đầy đủ thông tin có thể được tương tác qua token cho user rồi nên không viết api cho user lấy profile nửa
-app.get('/profile',  Auth.AuthRoleAmin, AccountController.GetAllProfile) // Dùng Cho Admin khi load dashboard
-app.get('/profile/:id',  Auth.AuthRoleAmin, AccountController.GetProfileByID) // Dùng Cho Admin khi load dashboard
 
 module.exports = (root) =>{
 

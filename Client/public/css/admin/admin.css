@@ -177,7 +177,7 @@ p, figure {
 }
 
 .btn-header:hover{
-	color: #ff03c0;
+	color: #00e1ff;
 }
 .btn-add-staff:hover{
 	
@@ -214,6 +214,16 @@ td p{
 	border-radius: 50%;
 	height: 32px;
 	width: 32px;
+}
+.avt-user img {
+	border-radius: 50%;
+	height: 32px;
+	width: 32px;
+
+}
+.action span{
+	width: 20px;
+	
 }
 .projects-table .status > form {
 	float: right;

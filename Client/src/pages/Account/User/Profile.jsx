@@ -8,7 +8,7 @@ const _Token_Auth = process.env.REACT_APP_AUTH_LOGIN || 'TOKEN_AUTH_LOGIN';
 const _SECRET_KEY_LOGIN = process.env.REACT_APP__SECRET_KEY_LOGIN || 'token-login-account'
 
 
-const ProfileModal = ({ showModal, handleClose , ID, NAME,  AVT, EMAIL})  => {
+const ProfileModal = ({ showModal, handleClose , ID, NAME,  AVT, EMAIL , me})  => {
 
   const [show, setShow] = useState(showModal);
  
@@ -35,10 +35,8 @@ const ProfileModal = ({ showModal, handleClose , ID, NAME,  AVT, EMAIL})  => {
   const [file, setFile] = useState(null)
   const [email, setEmail] = useState('')
 
-  useEffect(() => {
-    // Ở đây, bạn có thể sử dụng ID, NAME, AVT, EMAIL để cập nhật state hoặc thực hiện các xử lý khác
-    // Ví dụ:
-    console.log("modal,",ID, NAME, AVT, EMAIL);
+  useEffect(() => {    
+    
     let idUser = ID
     let avt = AVT
     setFullName(NAME);
@@ -49,13 +47,17 @@ const ProfileModal = ({ showModal, handleClose , ID, NAME,  AVT, EMAIL})  => {
 
  
   useEffect(() => {
-    setButtonPass(
-      <>
-        <Button variant="warning" onClick={handleAddInput}>
-          Thay đổi mật khẩu
-        </Button>
-      </>
-    );  
+    if(me)
+    {
+      
+      setButtonPass(
+        <>
+          <Button variant="warning" onClick={handleAddInput}>
+            Thay đổi mật khẩu
+          </Button>
+        </>
+      );  
+    }
 
   }, []);
   

@@ -28,7 +28,7 @@ const HeaderNav = () => {
     const fetchData = async () => {
       let token = localStorage.getItem(_Token_Auth);
       const decoded = jwtDecode(token);
-      console.log(decoded);
+    
       setUserId(decoded.id);
       setNameUser(decoded.fullName);
       setAvt(decoded.avt);
@@ -79,15 +79,16 @@ const HeaderNav = () => {
 
   if(NameUser && idUser && email && avt)
   {
-    console.log('....', idUser, NameUser,avt, email);
+   
     modalProfile =
     <ProfileModal
       showModal={isProfileModalOpen}
-      handleClose={() => setProfileModalOpen(false)}
+      handleClose={() => {setProfileModalOpen(false)}}
       ID={idUser}
       NAME={NameUser}
       AVT={avt}
       EMAIL={email}
+      me={true}
   />
   }
 
@@ -99,38 +100,39 @@ const HeaderNav = () => {
       </Helmet>
       {modalProfile}
       <div className="navbar-main-">
-      <Navbar sticky="top" key={expand} expand={expand} className=" mb-3 navbar-top nvbar-main-">
-        <Container fluid sticky="top">
-          <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
-          <Navbar.Offcanvas
-            id={`offcanvasNavbar-expand-${expand}`}
-            aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
-            placement="top"
-          >
-            <Offcanvas.Header closeButton>
-              <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-                Menu
-              </Offcanvas.Title>
-            </Offcanvas.Header>
-            <Offcanvas.Body className="nav-body">
-              <Nav className="justify-content-center flex-grow-1 pe-3 nav-menu">
-              {DIManagerAccount}
-                
-                
-                <Nav.Link className="Menu-Title-product" href="/">Sản Phẩm</Nav.Link>
-              </Nav>
-              <figure>
-                <button className="" onClick={() => setProfileModalOpen(true)}>
-                  <img src={selectedImage} alt="User Avatar" />
-                </button>
-                <Button variant="outline-info btn-logout" onClick={LogOut}>
-                  Đăng Xuất
-                </Button>
-              </figure>
-            </Offcanvas.Body>
-          </Navbar.Offcanvas>
-        </Container>
-      </Navbar>
+        <Navbar sticky="top" key={expand} expand={expand} className=" mb-3 navbar-top nvbar-main-">
+          <Container fluid sticky="top">
+            <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
+            <Navbar.Offcanvas
+              id={`offcanvasNavbar-expand-${expand}`}
+              aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
+              placement="top"
+            >
+              <Offcanvas.Header closeButton>
+                <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
+                  Menu
+                </Offcanvas.Title>
+              </Offcanvas.Header>
+              <Offcanvas.Body className="nav-body">
+                <Nav className="justify-content-center flex-grow-1 pe-3 nav-menu">
+                {DIManagerAccount}
+                  
+                  
+                  <Nav.Link className="Menu-Title-product" href="/">Sản Phẩm</Nav.Link>
+                  <Nav.Link className="Menu-Title-product" href="/">Bán Hàng</Nav.Link>
+                </Nav>
+                <figure>
+                  <button className="" onClick={() => setProfileModalOpen(true)}>
+                    <img src={selectedImage} alt="User Avatar" />
+                  </button>
+                  <Button variant="outline-info btn-logout" onClick={LogOut}>
+                    Đăng Xuất
+                  </Button>
+                </figure>
+              </Offcanvas.Body>
+            </Navbar.Offcanvas>
+          </Container>
+        </Navbar>
 
       </div>
     </HelmetProvider>

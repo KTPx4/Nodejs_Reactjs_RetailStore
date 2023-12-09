@@ -28,15 +28,56 @@ const { log } = require('console');
 
 
 module.exports.GetAll = async(req, res) =>{
-    const account = await AccountModel.find();
-    res.json({
-        code: 200,
-        message: "Danh Sách Tài Khoản",
-        data: {
-            length: account.length,
-            account: account
-        }
-    })
+    let {search} = req.query 
+    var accounts = undefined
+    let {root} = req.vars
+    // console.log("search,", search);
+    if(search)
+    {
+        accounts = await AccountModel.find({
+            $or: [
+                { fullName: { $regex: new RegExp(search, 'i') } }, // Tìm kiếm trong fullName (case-insensitive)
+                { Email: { $regex: new RegExp(search, 'i') } },    // Tìm kiếm trong email (case-insensitive)
+                { User: { $regex: new RegExp(search, 'i') } },     // Tìm kiếm trong User (case-insensitive)
+                // Thêm các trường khác cần tìm kiếm ở đây
+            ]
+            })
+    }
+    else 
+    {
+        accounts = await AccountModel.find();
+
+    }
+       
+       accounts.forEach(element => {
+    
+           if(!createFolder(root, element._id, element.NameAvt))
+           {
+               console.log("Can't create folder for UserID: ", element._id);
+           }
+        
+       });
+        res.json({
+            code: 200,
+            message: "Danh Sách Tài Khoản",
+            data: {
+                length: accounts.length,
+                accounts: accounts
+            }
+        })
+    try{
+        
+    }
+    catch(err)
+    {
+        console.log("Error at AccountController - GetALl, ", err.message);
+        res.json({
+            code: 500,
+            message: "Lỗi Server",
+            data: []
+        })
+    }
+  
 }
 
 module.exports.Login = async(req, res) =>{
@@ -52,6 +93,7 @@ module.exports.Login = async(req, res) =>{
         {
             throw new Error('Tài Khoản không tồn tại')
         }
+      
         accountUser = account
         return bcrypt.compare(password, account.Password)
     })
@@ -518,12 +560,29 @@ module.exports.UpdateProfile = async (req, res) =>{
 }
 
 
-module.exports.GetAllProfile = (req, res) =>{
 
-}
-module.exports.GetProfileByID = (req, res) =>
+module.exports.GetProfileByID = async(req, res) =>
 {
+    let {id} = req.params
+    const account = await AccountModel.findOne({_id: id});
+    if(account)
+    {
+        return res.json({
+            code: 200,
+            message: `Tìm thấy tài khoản id: '${id}'`,
+            data: {
+                account: account
+            }
+        })
 
+    }
+    return res.json({
+        code: 400,
+        message: "Không tìm thấy tài khoản",
+        data:{
+            account: []
+        }
+    })
 }
 
 const createFolder = (root, idUser, nameAvt)=>
