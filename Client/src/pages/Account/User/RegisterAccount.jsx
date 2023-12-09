@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate as Redirect } from "react-router-dom";
 
-const _Root_IMG = __dirname + "img/register"
+const _Root_IMG = __dirname + "img"
 const _Token_Auth = 'token-auth'
 class RegisterPage extends React.Component{
 
@@ -32,7 +32,7 @@ class RegisterPage extends React.Component{
         // Change icon
         const link = document.createElement('link');
         link.rel = 'icon';
-        link.href = `${_Root_IMG}/register.ico`; 
+        link.href = `${_Root_IMG}/logo.png`;
         document.head.appendChild(link);
     }
 

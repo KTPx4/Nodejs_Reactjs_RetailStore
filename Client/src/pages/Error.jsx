@@ -4,7 +4,7 @@ import React from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import Button from "react-bootstrap/Button";
 import AlertComponent from "../components/Alert/AlertComponent";
-const _Root_IMG = __dirname + "img/home";
+const _Root_IMG = __dirname + "img";
 
 const ErrorPage = (props) => {
   useEffect(() => {
@@ -12,7 +12,7 @@ const ErrorPage = (props) => {
     // Change icon
     const link = document.createElement("link");
     link.rel = "icon";
-    link.href = `${_Root_IMG}/home.png`;
+    link.href = `${_Root_IMG}/logo.png`;
     document.head.appendChild(link);
   }, []);
   

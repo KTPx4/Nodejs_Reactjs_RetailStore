@@ -8,7 +8,7 @@ import axios from 'axios';
 import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch } from "react-redux";
 
-const _Root_IMG = __dirname + "img/login";
+const _Root_IMG = __dirname + "img";
 const _Token_Auth = process.env.REACT_APP_AUTH_LOGIN || 'TOKEN_AUTH_LOGIN';
 
 const LoginPage = (props) => {
@@ -37,7 +37,7 @@ const LoginPage = (props) => {
         // Change icon
         const link = document.createElement('link');
         link.rel = 'icon';
-        link.href = `${_Root_IMG}/login.ico`; 
+        link.href = `${_Root_IMG}/logo.png`;
         document.head.appendChild(link);
     }, []);
 

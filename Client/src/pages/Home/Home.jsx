@@ -5,7 +5,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { Container } from 'react-bootstrap';
-const _Root_IMG = __dirname + "img/home";
+const _Root_IMG = __dirname + "img";
 
 const HomePage = (props) =>{
     useEffect(() =>{
@@ -13,14 +13,14 @@ const HomePage = (props) =>{
         // Change icon
         const link = document.createElement('link');
         link.rel = 'icon';
-        link.href = `${_Root_IMG}/home.png`; 
+        link.href = `${_Root_IMG}/logo.png`;
         document.head.appendChild(link);
     }, [])
 
     return(
         <HelmetProvider>
             <Helmet>
-                {/* <link rel="stylesheet" type="text/css" href="/css/login.css" /> */}
+                <link rel="stylesheet" type="text/css" href="/css/product/product.css" />
             </Helmet>
            <Container>
            <Card style={{ width: '18rem' }}>

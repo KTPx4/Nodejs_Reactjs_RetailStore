@@ -18,7 +18,7 @@ const ActivePage = () => {
   const [countdown, setCountdown] = useState(10);
   const [alertComponent, setAlert] = useState(<></>);
 
-  const _Root_IMG = __dirname + "img/active";
+  const _Root_IMG = __dirname + "img";
   let textReload = <></>
   
 
@@ -36,7 +36,7 @@ const ActivePage = () => {
     // Change icon
     const link = document.createElement("link");
     link.rel = "icon";
-    link.href = `${_Root_IMG}/active.ico`;
+    link.href = `${_Root_IMG}/logo.png`;
     document.head.appendChild(link);
   }, []);
 

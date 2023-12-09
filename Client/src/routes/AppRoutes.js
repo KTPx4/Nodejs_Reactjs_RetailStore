@@ -41,13 +41,10 @@ const AppRoutes = (props) => {
         <Route path="/account/login" element={<LoginPage />} />
         <Route path="/account/active" element={<ActivePage />} />
        
-
-        <Route path="/account" element={<UserRouter> <LayoutPage/> </UserRouter>}>
-          <Route index element={<ProfilePage />} />   
-        </Route>
-
-        <Route path="/account/admin" element={<AdminRouter><LayoutPage /></AdminRouter>}>
+     
+        <Route path="/account" element={<AdminRouter><LayoutPage /></AdminRouter>}>
           <Route index element={<AdminPage />} />   
+          <Route path="admin" element={<AdminPage/>}/>
         </Route>
 
         <Route path="*" element={<NotFound />} />

@@ -1,0 +1,42 @@
+.navbar-top{
+    /* background-color: transparent; */
+}
+.navbar-main-{
+    background: linear-gradient(313deg, #5b7983d2, #947b9f) !important;
+
+}
+.navbar-top{
+  
+    font-size: large;
+    font-weight: bold;
+}
+
+.dropdown-menu
+{
+    background: linear-gradient(180deg, #62747ad2, #94849b) !important;
+}
+
+.nav-body img{
+    border-radius: 50%;
+	height: 40px;
+	width: 40px;
+}
+.nav-menu :hover{
+    color: rgba(145, 10, 88, 0.863);
+}
+.btn-logout{
+   padding: 0;
+    height: 30px;
+    width: 100px;
+    color: white;
+    transition: 0.5s !important;
+}
+.btn-logout:hover{   
+    color: black;
+}
+figure button{
+    background-color: transparent;
+    border: none;
+
+}
+

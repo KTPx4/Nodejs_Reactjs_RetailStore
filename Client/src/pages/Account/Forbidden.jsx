@@ -2,7 +2,7 @@ import Button from "react-bootstrap/Button";
 import React from "react";
 import AlertComponent from "../../components/Alert/AlertComponent";
 import { useEffect } from "react";
-const _Root_IMG = __dirname + "img/home";
+const _Root_IMG = __dirname + "img";
 
 const ForbiddenPage = () =>{
     useEffect(() => 
@@ -13,7 +13,7 @@ const ForbiddenPage = () =>{
         // Change icon
         const link = document.createElement('link');
         link.rel = 'icon';
-        link.href = `${_Root_IMG}/home.png`; 
+        link.href = `${_Root_IMG}/logo.png`;
         document.head.appendChild(link);
     }, []);
 

@@ -8,9 +8,10 @@ const _Token_Auth = process.env.REACT_APP_AUTH_LOGIN || 'TOKEN_AUTH_LOGIN';
 const _SECRET_KEY_LOGIN = process.env.REACT_APP__SECRET_KEY_LOGIN || 'token-login-account'
 
 
-function ProfileModal() {
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+const ProfileModal = ({ showModal, handleClose , ID, NAME,  AVT, EMAIL})  => {
+
+  const [show, setShow] = useState(showModal);
+ 
   const handleShow = () => setShow(true);
   
   const [fullName, setFullName] = useState(""); 
@@ -20,6 +21,7 @@ function ProfileModal() {
 
   
   const [ErrorMess, setError] = useState('')
+  const [SuccessMess, setSuccess] = useState('')
   
   const [isChangePass, setIsChangePass] = useState(false);
  
@@ -32,6 +34,20 @@ function ProfileModal() {
   const [selectedImage, setSelectedImage] = useState('/img/account/3.jpg');
   const [file, setFile] = useState(null)
   const [email, setEmail] = useState('')
+
+  useEffect(() => {
+    // Ở đây, bạn có thể sử dụng ID, NAME, AVT, EMAIL để cập nhật state hoặc thực hiện các xử lý khác
+    // Ví dụ:
+    console.log("modal,",ID, NAME, AVT, EMAIL);
+    let idUser = ID
+    let avt = AVT
+    setFullName(NAME);
+    setSelectedImage(AVT);
+    setEmail(EMAIL);
+    setSelectedImage(`${urlServer}/images/account/${idUser}/${avt}`)
+  }, [ID, NAME,  AVT, EMAIL]);
+
+ 
   useEffect(() => {
     setButtonPass(
       <>
@@ -39,19 +55,11 @@ function ProfileModal() {
           Thay đổi mật khẩu
         </Button>
       </>
-    );
+    );  
 
-    // load từ db dữ liệu - session
-    let token = localStorage.getItem(_Token_Auth)
-    
-    const decoded = jwtDecode(token);
-    let fullName = decoded.fullName
-    let idUser = decoded.id
-    let avt = decoded.avt
-    setEmail(decoded.email)
-    setSelectedImage(`${urlServer}/images/account/${idUser}/${avt}`)
-    setFullName(fullName)
   }, []);
+  
+ 
 
   const handleImageChange = (e) => {
     const f = e.target.files[0];
@@ -77,7 +85,7 @@ function ProfileModal() {
     setIsChangePass(true);
     setButtonPass(
       <>
-        {" "}
+        
         <Button variant="secondary" onClick={handleCloseInput}>
           Hủy
         </Button>
@@ -87,7 +95,7 @@ function ProfileModal() {
 
   const handleCloseInput = () => {
     setIsChangePass(false);
-    
+    ClearMess()
     setButtonPass(
       <>
         <Button variant="warning" onClick={handleAddInput}>
@@ -98,6 +106,7 @@ function ProfileModal() {
   };
 
   const handleSave = () => {
+    setSuccess('')
    // console.log(fullName);
     if(!fullName)
     {
@@ -172,7 +181,10 @@ function ProfileModal() {
           { 
             localStorage.setItem(_Token_Auth, res.data.data.token)
             setError('');
-            window.location.reload();
+            setSuccess('Cập Nhật Thông Tin Thành Công!')
+            setTimeout(()=>{
+              window.location.reload();
+            }, 1200)
           }
       })
       .catch((err) => {
@@ -182,24 +194,13 @@ function ProfileModal() {
   }, 1800)
   };
 
-  const ClearError = ()=>{
+  const ClearMess = ()=>{
     setError('')
+    setSuccess('')
   }
-
+ 
   return (
-    <HelmetProvider>
-      <Helmet>
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="/css/account/profile.css"
-        />
-      </Helmet>
-      <Button variant="primary" onClick={handleShow}>
-        Quản lý hồ sơ
-      </Button>
-
-      <Modal show={true} onHide={handleClose}>
+    <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Quản lý hồ sơ</Modal.Title>
         </Modal.Header>
@@ -229,7 +230,7 @@ function ProfileModal() {
                 type="text"
                 defaultValue={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                onFocus={ClearError}
+                onFocus={ClearMess}
               />
             </Form.Group>
             <br />
@@ -243,7 +244,7 @@ function ProfileModal() {
                       className="input-password"
                       type={showPassword ? "text" : "password"}
                       onChange={(e) => setOldPass(e.target.value)}
-                      onFocus={ClearError}
+                      onFocus={ClearMess}
                     />
                     <i
                       onClick={toggleShowPassword}
@@ -258,7 +259,7 @@ function ProfileModal() {
                       className="input-password"
                       type={showPassword ? "text" : "password"}
                       onChange={(e) => setnewPass(e.target.value)}
-                      onFocus={ClearError}
+                      onFocus={ClearMess}
                     />
                   </div>
                   <div className="confirm-password pass">
@@ -267,7 +268,7 @@ function ProfileModal() {
                       className="input_password"
                       type={showPassword ? "text" : "password"}
                       onChange={(e) => setconfirmPass(e.target.value)}
-                      onFocus={ClearError}
+                      onFocus={ClearMess}
                     />
                   </div>
                 </>
@@ -276,6 +277,10 @@ function ProfileModal() {
               {ErrorMess && ( 
               <Alert variant="danger">
                 {ErrorMess}
+            </Alert>)}
+              {SuccessMess && ( 
+              <Alert variant="success">
+                {SuccessMess}
             </Alert>)}
              
             </Form.Group>
@@ -292,7 +297,20 @@ function ProfileModal() {
           </Button>
         </Modal.Footer>
       </Modal>
-    </HelmetProvider>
+    // <HelmetProvider>
+    //   <Helmet>
+    //     <link
+    //       rel="stylesheet"
+    //       type="text/css"
+    //       href="/css/account/profile.css"
+    //     />
+    //   </Helmet>
+    //   <Button variant="primary" onClick={handleShow}>
+    //     Quản lý hồ sơ
+    //   </Button>
+
+      
+    // </HelmetProvider>
   );
 }
 
