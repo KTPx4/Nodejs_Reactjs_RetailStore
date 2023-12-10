@@ -102,7 +102,7 @@ const FirtLogin= (props) =>{
                     } 
                     else if ( code === 200) 
                     {
-                        setCountdown(10)
+                        setCountdown(5)
                         setReload(true)
                         setSuccess(message)                    
                         setError('')

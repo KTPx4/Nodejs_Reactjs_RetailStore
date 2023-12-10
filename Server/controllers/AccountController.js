@@ -3,6 +3,7 @@ const { sendTestEmail } = require("../modules/mailer");
 const bcrypt = require('bcrypt')
 const fs = require('fs');
 
+
 // Variable
 const SERVER_CLIENT = process.env.SERVER_CLIENT || 'http://localhost:3000' 
 const SECRET_ACTIVE = process.env.TOKEN_ACTIVE_ACCOUNT || 'token-active-account';
@@ -11,7 +12,9 @@ const SECRET_LOGIN = process.env.TOKEN_LOGIN_ACCOUNT || 'token-login-account';
 
 //model
 const AccountModel = require('../models/AccountModel');
-const { log } = require('console');
+const AgentModel = require('../models/Agent');
+
+
 
 
 // "web": {
@@ -208,11 +211,12 @@ module.exports.Register = async(req, res)=>{
             const data = {
                 email: Account.Email
             }
+
             token = jwt.sign(data, SECRET_ACTIVE, { expiresIn:  '1m'}); // token auth account
             
             const subject = "Active Account";
             const html = `
-              <p>Hí bạn ${email},</p>
+              <p>Hí bạn ${Account.fullName},</p>
               <p>Vui lòng kích hoạt tài khoản của bạn <a href="${SERVER_CLIENT}/account/active?token=${token}" >Tại đây</a> </p>
               <strong>Liên Kết sẽ hết hạn trong 1 phút, vui lòng nhanh cái tay lên ^^</strong>
               <p>Thank you</p>
@@ -234,8 +238,8 @@ module.exports.Register = async(req, res)=>{
         .catch((err)=>{
             console.log("Error at accountController: ", err)
             return res.json({
-                code: 400,
-                message: "Gửi email thất bại"
+                code: 500,
+                message: "Lỗi Server!"
                
             })
         })
@@ -247,7 +251,7 @@ module.exports.Register = async(req, res)=>{
     {
         console.log("Error at Register Controller: ", err)
         return res.json({
-            code: 400,
+            code: 500,
             message: "Đăng Ký Thất Bại. Vui lòng thử lại sau!"
         })
     }
@@ -312,6 +316,36 @@ module.exports.Active = async(req, res)=>{
     })
 }
 
+module.exports.SetStatus = async (req, res)=>{
+    let {email} = req.body
+   
+    try{
+       
+        let account= await AccountModel.findOne({Email: email})
+        let newStatus = !account.isDeleted
+       
+        await AccountModel.findOneAndUpdate({Email: email}, {isDeleted: newStatus}, {new:true})
+        .then(acc=>{
+            return res.json({
+                code: 200,
+                message: `Đã ${newStatus? "Khóa" : "Mở Khóa"} tài khoản thành công`,
+                data:{
+                    account: acc
+                }
+            })
+            
+        })
+       
+    }
+    catch(err)
+    {
+        console.log("Error at create active Controller: ", err)
+        return res.json({
+            code: 500,
+            message: "Vui lòng thử lại sau!"
+        })
+    }
+}
 module.exports.CreateActive = async(req, res)=>{
     let {email} = req.body
     try{
@@ -343,7 +377,7 @@ module.exports.CreateActive = async(req, res)=>{
         .catch((err)=>{
             console.log("Error at accountController: ", err)
             return res.json({
-                code: 400,
+                code: 500,
                 message: "Gửi email thất bại: " + err.message
                
             })
@@ -356,7 +390,7 @@ module.exports.CreateActive = async(req, res)=>{
     {
         console.log("Error at create active Controller: ", err)
         return res.json({
-            code: 400,
+            code: 500,
             message: "Gửi xác thực. Vui lòng thử lại sau!"
         })
     }
@@ -495,7 +529,7 @@ module.exports.UpdateProfile = async (req, res) =>{
     let token = undefined
     let Account= undefined
     let {root}  = req.vars
-    let {fullName, newPass, email} = req.body
+    let {fullName, newPass, email , agentId} = req.body
 
     Account = await AccountModel.findOne({Email: email})
     
@@ -508,6 +542,7 @@ module.exports.UpdateProfile = async (req, res) =>{
     }   
    
     let newPassHash = undefined
+    let newAgentID = undefined
     let id = Account._id
     let data = undefined
   
@@ -518,12 +553,26 @@ module.exports.UpdateProfile = async (req, res) =>{
         {
            newPassHash = await bcrypt.hash(newPass, 10)
         }
+        if(agentId)
+        {
+            AgentData = await AgentModel.findOne({_id: agentId})
+            if(!AgentData)
+            {
+                return res.json({
+                    code: 400,
+                    message: 'ID Cửa Hàng Không Tồn Tại'
+                })
+            }
+            newAgentID = agentId
+        }
+
         let newNameAVT = await upLoadAvt(req.file, root,  Account)
       //  console.log("Name new avt: ",newNameAVT);
         let account = await AccountModel.findOneAndUpdate({_id: id}, {
             fullName: fullName,
             Password: newPassHash,
-            NameAvt: newNameAVT                
+            NameAvt: newNameAVT,
+            AgentID: newAgentID
         }, {new: true})
       
         data = {
@@ -560,30 +609,56 @@ module.exports.UpdateProfile = async (req, res) =>{
 }
 
 
-
 module.exports.GetProfileByID = async(req, res) =>
 {
     let {id} = req.params
-    const account = await AccountModel.findOne({_id: id});
-    if(account)
+    try
     {
+        if(id.length !== 24)
+        {
+            return res.json({
+                code: 400,
+                message: "Không tìm thấy tài khoản",
+                data:{
+                    account: []
+                }
+            })
+        }
+
+        const account = await AccountModel.findOne({_id: id});
+        if(account)
+        {
+            return res.json({
+                code: 200,
+                message: `Tìm thấy tài khoản id: '${id}'`,
+                data: {
+                    account: account
+                }
+            })
+    
+        }
         return res.json({
-            code: 200,
-            message: `Tìm thấy tài khoản id: '${id}'`,
-            data: {
-                account: account
+            code: 400,
+            message: "Không tìm thấy tài khoản",
+            data:{
+                account: []
             }
         })
-
     }
-    return res.json({
-        code: 400,
-        message: "Không tìm thấy tài khoản",
-        data:{
-            account: []
-        }
-    })
+    catch(err)
+    {
+        console.log("Error At AccountController - GetProfile By ID, ", err);
+        return res.json({
+            code: 500,
+            message: "Lỗi Server",
+            data:{
+                account: []
+            }
+        })
+    }
+   
 }
+
 
 const createFolder = (root, idUser, nameAvt)=>
 {

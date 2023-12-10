@@ -144,7 +144,7 @@ module.exports.InputSendAcitve = async (req, res, next) =>
     {
         return res.json({
             code: 400,
-            message: "Thiếu địa chỉ email cần gửi kích hoạt"
+            message: "Thiếu địa chỉ email"
         })
     }
     let account = await AccountModel.findOne({Email: email})
@@ -153,7 +153,7 @@ module.exports.InputSendAcitve = async (req, res, next) =>
     {
         return res.json({
             code: 400,
-            message: "Tài Khoản không tồn tại để kích hoạt"
+            message: "Tài Khoản không tồn tại hoặc vừa bị xóa"
 
         })
     }

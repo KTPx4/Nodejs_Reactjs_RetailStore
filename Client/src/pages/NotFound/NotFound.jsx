@@ -88,7 +88,7 @@ class NotFound extends React.Component {
                     </a>
                   </Col>
                   <Col className="col sells" xs={12} sm={4}>
-                    <a id="tagSell" href="/Sell">
+                    <a id="tagSell" href="/product/sales">
                       <img
                         id="imgSell"
                         src={`${_Root_IMG}/commission.png`}

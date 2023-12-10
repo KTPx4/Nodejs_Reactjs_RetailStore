@@ -2,8 +2,8 @@
 body 
 {
     /* background-color: transparent !important; */
-    background: linear-gradient(180deg, #978f94d2, #8e9091) !important;		
-
+    /* background: linear-gradient(180deg, #978f94d2, #8e9091) !important;		 */
+    background: rgb(45,45,45) !important;
     margin: 0;
     padding: 0;
     font-family: "Arial", sans-serif;

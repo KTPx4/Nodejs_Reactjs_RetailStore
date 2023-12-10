@@ -56,10 +56,11 @@ const HeaderNav = () => {
 
   let DIManagerAccount = <></>;
 
-  let expand = "sm";
+  let expand = "md";
 
   if (isAdmin) {
     DIManagerAccount = (
+     <>
       <NavDropdown
         className="Menu-Title-account"
         title="Tài Khoản"
@@ -74,6 +75,9 @@ const HeaderNav = () => {
         <NavDropdown.Item href="#">Để cho đẹp</NavDropdown.Item>
         <NavDropdown.Item href="#">Để cho đẹp</NavDropdown.Item>
       </NavDropdown>
+      <Nav.Link className="Menu-Title-product" href="/report">Báo Cáo</Nav.Link>
+     </>
+
     );
   }
 
@@ -100,7 +104,13 @@ const HeaderNav = () => {
       </Helmet>
       {modalProfile}
       <div className="navbar-main-">
-        <Navbar sticky="top" key={expand} expand={expand} className=" mb-3 navbar-top nvbar-main-">
+
+      </div>
+        <Navbar  sticky="top" key={expand} expand={expand} 
+        variant= 'light' 
+        className=" mb-3 navbar-top "
+       id="nvbar-main"
+        >
           <Container fluid sticky="top">
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
             <Navbar.Offcanvas
@@ -108,22 +118,50 @@ const HeaderNav = () => {
               aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
               placement="top"
             >
+           
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-                  Menu
+                  Menu 
+                  <br />
+                  <a href="/">Home</a>
                 </Offcanvas.Title>
               </Offcanvas.Header>
               <Offcanvas.Body className="nav-body">
+                <figure>
+                  <button className="" onClick={() => window.location.replace("/")}>
+                    <img 
+                      className="logoHome" 
+                      src="/img/logo1.png" 
+                      alt="Trang Chủ" 
+                      style={{
+                        width: "45px",
+                        height: "45px"
+                      }}
+                    />
+                   
+                  </button>
+                </figure>
+                <a href="/" style={{color: "white"}}> <h4 className="mt-2">Trang Chủ</h4></a>
+                
+              
+
                 <Nav className="justify-content-center flex-grow-1 pe-3 nav-menu">
-                {DIManagerAccount}
-                  
-                  
-                  <Nav.Link className="Menu-Title-product" href="/">Sản Phẩm</Nav.Link>
-                  <Nav.Link className="Menu-Title-product" href="/">Bán Hàng</Nav.Link>
+                  <Nav.Link className="Menu-Title-product" href="/product/sales">Bán Hàng</Nav.Link>
+                  <Nav.Link className="Menu-Title-product" href="/product/views">Sản Phẩm</Nav.Link>
+                  {DIManagerAccount}
                 </Nav>
+                
                 <figure>
                   <button className="" onClick={() => setProfileModalOpen(true)}>
-                    <img src={selectedImage} alt="User Avatar" />
+                    <img 
+                      className="imgAVT-profile" 
+                      src={selectedImage} 
+                      alt="Profile Avatar" 
+                      style={{
+                        width: "45px",
+                        height: "45px"
+                      }}
+                    />
                   </button>
                   <Button variant="outline-info btn-logout" onClick={LogOut}>
                     Đăng Xuất
@@ -133,8 +171,6 @@ const HeaderNav = () => {
             </Navbar.Offcanvas>
           </Container>
         </Navbar>
-
-      </div>
     </HelmetProvider>
   );
 };

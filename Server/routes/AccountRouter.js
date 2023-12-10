@@ -29,6 +29,7 @@ app.post('/register',  Auth.AuthRoleAmin, AccountValidator.InputRegister, Accoun
 app.post('/changepassword', Auth.AuthAccount, AccountValidator.InputChangePass, AccountController.ChangePassword)
 
 app.post('/sendactive', Auth.AuthRoleAmin, AccountValidator.InputSendAcitve, AccountController.CreateActive)
+app.post('/setstatus', Auth.AuthRoleAmin, AccountValidator.InputSendAcitve, AccountController.SetStatus)
 
 module.exports = (root) =>{
 

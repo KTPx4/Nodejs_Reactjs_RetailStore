@@ -1,0 +1,21 @@
+
+.Modal-Add-Staff .modal-content{
+	margin: 1px;
+	background-color: transparent;
+	border: none;
+}
+
+.content{
+	color: rgb(255, 255, 255);
+	margin: 1px;
+	background: linear-gradient(360deg, #99b2b4, #7b7696e7) !important;		
+	border: 1px solid none;
+	border-radius: 25px;
+}
+.text-Tilte{
+	margin: 1px;	
+
+}
+.input-modal{
+	margin-top: 10px;
+}

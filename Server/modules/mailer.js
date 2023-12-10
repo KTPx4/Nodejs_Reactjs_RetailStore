@@ -36,7 +36,7 @@ const sendTestEmail = async (toEmail, subject, html) => {
   });
 
 
-  const from = MY_EMAIL;
+  const from = `Anh Admin Khó Tánh <${MY_EMAIL}>`;
 
   return new Promise((resolve, reject) => {
     transport.sendMail({ from, subject, to: toEmail, html }, (err, info) => {

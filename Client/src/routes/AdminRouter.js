@@ -6,7 +6,9 @@ import ForbiddenPage from "../pages/Account/Forbidden";
   
 
 
-  function ProtectedRoute({ children }) {
+  function ProtectedRoute({ children }) 
+  {
+
     const _Token_Auth = process.env.REACT_APP_AUTH_LOGIN || 'TOKEN_AUTH_LOGIN';
     const _URLServer = process.env.REACT_APP_SERVER || "http://localhost:3001";
     const tokenLogin = localStorage.getItem(_Token_Auth) || "";
@@ -30,7 +32,7 @@ import ForbiddenPage from "../pages/Account/Forbidden";
            
             if(localStorage.getItem(_Token_Auth))
             {
-                localStorage.removeItem(_Token_Auth)
+              localStorage.removeItem(_Token_Auth)
             }
             window.location.replace ('/account/login')
             // setResult(<Navigate to="/account/login" />);

@@ -4,6 +4,20 @@
     object-fit: fill !important;
     border-radius: 50%;
 }
+.Modal-Profile .modal-content{ 
+  margin: 1px;
+	background-color: transparent;
+	border: none;
+}
+
+.Modal-Profile .content{
+	color: rgb(159, 234, 240);
+	margin: 1px;
+  background: linear-gradient(360deg, #272727, #814769e7) !important;		
+	
+	border: 1px solid none;
+	border-radius: 30px;
+}
 
 .pass{
     position: relative;
@@ -31,6 +45,11 @@ cursor: pointer;
     border-radius: 50%;
     animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
   }
+  .input-disable{
+  
+    background-color: rgba(141, 139, 139, 0.63) !important;
+  }
+
   .lds-ripple div:nth-child(2) {
     animation-delay: -0.5s;
   }  

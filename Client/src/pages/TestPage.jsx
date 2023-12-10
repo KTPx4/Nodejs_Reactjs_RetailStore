@@ -1,11 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
-import LoadingComponent from "../components/Loading/LoadingComponent"
+import ConfirmSendEmail from "../components/Modal/SendActive";
+import SetStatus from "../components/Modal/setStatus";
 const _Root_IMG = __dirname + "img";
 
 const TestPage = (props) => {
+  const [isProfile, setProfileModalOpen] = useState(true);
+
+
   useEffect(() => {
     document.title = "Test Component";
     // Change icon
@@ -18,12 +22,12 @@ const TestPage = (props) => {
   return (
     <HelmetProvider>
       <Helmet>
-        <link rel="stylesheet" type="text/css" href="/css/test.css" />
-
-       
+        <link rel="stylesheet" type="text/css" href="/css/test.css" />      
         
-      </Helmet>
-     	<LoadingComponent/>
+      </Helmet> 
+
+
+
     </HelmetProvider>
   );
 };
