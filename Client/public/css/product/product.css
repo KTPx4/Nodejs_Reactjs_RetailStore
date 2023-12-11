@@ -4,7 +4,9 @@
 .list-product{
 	margin: 10px;
 }
-
+.list-product img{
+  object-fit:  cover !important;
+}
 .site-form-in-drawer-wrapper {
     position: absolute;
     right: 0px;
@@ -20,4 +22,115 @@
 
 .Menu-Title-product {
 	color: #0be9e2 !important; 
+}
+
+.btn-add-prod{
+	margin-left: 15px;
+}
+.btn-add-prod:hover{
+	color: green;
+}
+
+.projects {
+	background-color: transparent;
+	/* border: 1px solid #a59dd3; */
+	overflow-x: auto;
+	width: 100%;
+}
+.projects-inner {
+	border-radius: 4px;
+}
+.projects-header {
+	color: rgb(255, 255, 255);
+	padding: 22px;
+
+	display: flex;
+	justify-content: flex-start;
+    align-items: center;
+}
+.projects-header .count, .projects-header .title {
+	display: inline-block;
+}
+.projects-header .count {
+	color: #ccdcf3;
+}
+.projects-header .zmdi {
+	cursor: pointer;
+	float: right;
+	font-size: 16px;
+	margin: 5px 0;
+}
+.projects-header .title {
+	font-size: 22px;
+    font-weight: bold;
+}
+.projects-header .title + .count {
+	margin-left: 5px;
+}
+.projects-table {
+	background: transparent;
+	width: 100%;
+}
+
+.projects-table td, .projects-table th {
+	color: white;
+	padding: 10px 5px;
+	vertical-align: middle;
+}
+.projects-table td p {
+	font-size: 16px;
+}
+.ant-card-body{
+  min-height: 223px;
+  max-height: 223px;
+  overflow: scroll;
+}
+.ant-card{
+  max-height: 425px;
+  min-height: 425px;
+  max-width: 250px;
+  min-width: 250px;
+}
+.ant-card-meta-title{
+  white-space: unset   !important;
+}
+.ant-card-meta-description{
+  max-height: 120px;
+  overflow: auto;
+}
+.ant-badge-count {
+  max-width: 200px;
+}
+::-webkit-scrollbar{
+	background-color: transparent;
+}
+
+@media (min-width: 1400px){
+  .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+      max-width: 1700px;
+  }
+}
+
+@media (max-width: 900px){
+  .list-product {
+    display: flex;
+    justify-content: center !important;
+    padding: 0 auto;
+  }
+  .col-md-3 {
+    flex: 0 0 auto;
+    width: 33.33%;
+  }
+}
+
+@media (max-width: 690px)
+{
+  .list-product {
+    display: flex;
+    justify-content: center !important;   
+  }
+  .col-md-3 {
+    flex: 0 0 auto;
+    width: 100%;
+  }
 }

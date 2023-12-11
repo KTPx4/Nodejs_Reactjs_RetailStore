@@ -54,7 +54,7 @@ module.exports.InputAdd = async(req, res, next) =>{
 module.exports.ExistsProduct = async(req, res, next) =>{
 
     let {barcode} = req.params 
-    console.log(barcode);  
+  
     let product = await ProductModel.findOne({BarCode: barcode})
     if(!product)
     {
