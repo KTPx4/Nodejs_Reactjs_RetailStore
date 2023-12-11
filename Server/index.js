@@ -12,6 +12,8 @@ const HomeRouter = require('./routes/HomeRouter')
 const AccountRouter = require('./routes/AccountRouter')
 const AgentRouter = require('./routes/AgentRouter')
 const UploadRouter= require('./routes/UploadRouter')
+const ProductRouter = require("./routes/ProductRouter")
+
 const port = process.env.PORT || 3000
 
 const uploader = multer({dest: __dirname +'/uploads/'})
@@ -34,7 +36,7 @@ app.use('/api', HomeRouter)
 app.use('/api/account', AccountRouter(__dirname))
 
 app.use('/api/agents', AgentRouter)
-
+app.use('/api/products', ProductRouter)
 app.use('*', (req, res)=>{
     res.json({
         code: 404,
@@ -52,7 +54,7 @@ app.use('*', (req, res)=>{
 const startProgram = async()=>{
    // console.log(await bcrypt.hash("12345", 10));
    
-    let connect = await require('./models/DB')
+    await require('./models/DB')
     .then(async()=>{
 
       //      mongoose.connection.dropCollection('accounts')

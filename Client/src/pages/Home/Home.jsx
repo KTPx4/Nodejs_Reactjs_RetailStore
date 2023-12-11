@@ -24,7 +24,7 @@ const HomePage = (props) => {
   {
     CardManageA = (
     <>
-        <div className="col-12 col-md-6  d-flex justify-content-center">
+        <div className="col-12 col-sm-6    d-flex justify-content-center">
               <div className="card-home card-display">
                 <div className="card-element">
                   <h1>Tài Khoản</h1>
@@ -38,7 +38,7 @@ const HomePage = (props) => {
     </>)
     CardViewReport = (
     <>
-        <div className="col-12 col-md-6 d-flex justify-content-center">
+        <div className="col-12 col-sm-6   d-flex justify-content-center">
               <div className="card-home card-display">
                 <div className="card-element">
                   <h1>Báo Cáo</h1>
@@ -60,31 +60,31 @@ const HomePage = (props) => {
       <div className="main-body body-home">
         <div className="container" ng-app="tabApp">
           <div className="row text-center" ng-controller="TabController">
-            <div className="col-12 col-md-4 d-flex justify-content-center ">
+            <div className="col-12  col-sm-6 col-md-4  d-flex justify-content-center ">
               <div className="card-home card-display">
                 <div className="card-element">
                   <h1>Sản Phẩm</h1>
                   <p className="text-center">Quản lý thông tin Sản Phẩm</p>
                   <p className="text-center">
-                      <button className="close">Truy Cập</button>
+                      <button className="close" onClick={()=> window.location.replace('/product/views')}>Truy Cập</button>
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="col-12 col-md-4 d-flex justify-content-center">
+            <div className="col-12  col-sm-6 col-md-4  d-flex justify-content-center">
               <div className="card-home card-display">
                 <div className="card-element">
                   <h1>Bán Hàng</h1>
                   <p className="text-center">Giao dịch và xuất hóa đơn nhanh chóng</p>
                   <p className="text-center">
-                      <button className="close">Truy Cập</button>
+                      <button className="close"  onClick={()=> window.location.replace('/product/sales')}>Truy Cập</button>
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="col-12 col-md-4 d-flex justify-content-center">
+            <div className="col-12  col-sm-6 col-md-4  d-flex justify-content-center">
               <div className="card-home card-display">
                 <div className="card-element">
                   <h1>Khách Hàng</h1>

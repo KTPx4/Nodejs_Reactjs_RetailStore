@@ -6,21 +6,26 @@ import {
 
 import React, { useEffect } from "react";
 
-
+// Authen - Author
 import AdminRouter from "../routes/AdminRouter";
 import UserRouter from "../routes/UserRouter";
 
-import NotFound from "../pages/NotFound/NotFound";
+//Layout -> navbar + body + footer
 import LayoutPage from "../components/Layout/LayoutPage";
+
+//Page
+import NotFound from "../pages/NotFound/NotFound";
 import Home from "../pages/Home/Home";
-import ProfilePage from "../pages/Account/User/Profile";
 import AdminPage from "../pages/Account/Admin";
 import LoginPage from "../pages/Account/User/Login";
 import ErrorPage from "../pages/Error";
 import ActivePage from "../pages/Account/User/Active";
+import ProductPage from "../pages/Product/Manage";
 
+//testing component
 import TestPage from "../pages/TestPage";
 
+// Check Login and Role before load page
 import { useVerifyLogin } from "../hook/HookLogin";
 
 const AppRoutes = (props) => {
@@ -52,6 +57,12 @@ const AppRoutes = (props) => {
           <Route path="admin" element={<AdminPage/>}/>
         </Route>
 
+        <Route path="/product" element={<UserRouter><LayoutPage /></UserRouter>}>
+          <Route index element={<ProductPage />} />   
+          <Route path="views" element={<ProductPage/>}/>
+          <Route path="sales" element={<><p className="text-light">Sales Page</p> </>}/>
+        </Route>
+        
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

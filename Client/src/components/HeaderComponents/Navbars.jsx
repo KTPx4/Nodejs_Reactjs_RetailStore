@@ -75,7 +75,7 @@ const HeaderNav = () => {
         <NavDropdown.Item href="#">Để cho đẹp</NavDropdown.Item>
         <NavDropdown.Item href="#">Để cho đẹp</NavDropdown.Item>
       </NavDropdown>
-      <Nav.Link className="Menu-Title-product" href="/report">Báo Cáo</Nav.Link>
+      <Nav.Link className="Menu-Title-report" href="/report">Báo Cáo</Nav.Link>
      </>
 
     );
@@ -146,8 +146,9 @@ const HeaderNav = () => {
               
 
                 <Nav className="justify-content-center flex-grow-1 pe-3 nav-menu">
-                  <Nav.Link className="Menu-Title-product" href="/product/sales">Bán Hàng</Nav.Link>
+                  <Nav.Link className="Menu-Title-product-sales" href="/product/sales">Bán Hàng</Nav.Link>
                   <Nav.Link className="Menu-Title-product" href="/product/views">Sản Phẩm</Nav.Link>
+                  <Nav.Link className="Menu-Title-customer" href="/customer/views">Khách Hàng</Nav.Link>
                   {DIManagerAccount}
                 </Nav>
                 
@@ -176,3 +177,4 @@ const HeaderNav = () => {
 };
 
 export default HeaderNav;
+
