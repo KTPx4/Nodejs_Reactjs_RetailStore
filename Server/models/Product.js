@@ -27,7 +27,12 @@ let ProductSchema = new mongoose.Schema({
    CreateAt:{
     type: Date,
     default: Date.now
+   },
+   
+   linkImg:{
+      type: String
    }
+
 })
 
 module.exports = mongoose.model('Product', ProductSchema)

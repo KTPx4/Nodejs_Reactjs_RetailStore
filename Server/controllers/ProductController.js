@@ -31,7 +31,7 @@ module.exports.GetAll = async(req, res) =>{
 module.exports.Add = async (req, res) =>{
     try
     {   
-        let {BarCode, ProductName, OriginPrice, DisplayPrice, Category, Description} = req.body
+        let {BarCode, ProductName, OriginPrice, DisplayPrice, Category, Description, linkImg } = req.body
         if(!DisplayPrice) DisplayPrice = OriginPrice
         await ProductModel.create({
             BarCode: BarCode,
@@ -39,7 +39,8 @@ module.exports.Add = async (req, res) =>{
             OriginPrice: OriginPrice,
             DisplayPrice: DisplayPrice,
             Category: Category,
-            Description: Description?? ""
+            Description: Description?? "",
+            linkImg: linkImg
         })
         .then(product =>
         {
@@ -69,13 +70,14 @@ module.exports.Update = async (req, res) =>{
     try
     {   
         let {barcode} = req.params
-        let {ProductName, OriginPrice, DisplayPrice, Category, Description} = req.body
+        let {ProductName, OriginPrice, DisplayPrice, Category, Description, linkImg} = req.body
         await ProductModel.findOneAndUpdate({BarCode: barcode}, {
             ProductName,
             OriginPrice,
             DisplayPrice,
             Category,
-            Description
+            Description,
+            linkImg
         }, {new: true})
         .then(prod=>{
             return res.json({

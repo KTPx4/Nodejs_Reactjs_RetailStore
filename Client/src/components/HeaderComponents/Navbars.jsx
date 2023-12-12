@@ -56,7 +56,7 @@ const HeaderNav = () => {
 
   let DIManagerAccount = <></>;
 
-  let expand = "md";
+  let expand = "lg";
 
   if (isAdmin) {
     DIManagerAccount = (
@@ -121,9 +121,7 @@ const HeaderNav = () => {
            
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-                  Menu 
-                  <br />
-                  <a href="/">Home</a>
+                  Menu                  
                 </Offcanvas.Title>
               </Offcanvas.Header>
               <Offcanvas.Body className="nav-body">

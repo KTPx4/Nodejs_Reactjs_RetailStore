@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import React from "react";
 import axios from "axios";
-import { Alert } from "react-bootstrap";
+import { Button as Btn,Alert } from "react-bootstrap";
 import { useSelector } from "react-redux";
+
 import {
   Avatar,
   Card,
@@ -18,6 +19,7 @@ import {
   Space,
   notification,
 } from "antd";
+import { parseInt } from "lodash";
 
 const { Meta } = Card;
 const { Option } = Select;
@@ -25,10 +27,10 @@ const { Option } = Select;
 const _Token_Auth = process.env.REACT_APP_AUTH_LOGIN || "TOKEN_AUTH_LOGIN";
 const tokenLogin = localStorage.getItem(_Token_Auth) || "";
 const urlServer = process.env.REACT_APP_SERVER || "";
-const urlCreate = urlServer + "/api/products/";
+const urlEdit = urlServer + "/api/products/";
 
-const AddProductTab = ({ isOpen, HandleClose, HandleSuccess }) => {
-  let isAdmin = useSelector((state) => state.isAdmin);
+const EditProductTab = ({ isOpen, HandleClose, HandleSuccess, HandleFailed, Product }) => {
+  
 
   const [ErrorMess, setError] = useState(false);
   const [Price, setPrice] = useState(0);
@@ -79,18 +81,21 @@ const AddProductTab = ({ isOpen, HandleClose, HandleSuccess }) => {
         linkImg: LinkImg
       };
 
-
      
-      let res = await SendAdd(urlCreate, tokenLogin, data);
+      let res = await SendEdit(urlEdit + barCode, tokenLogin, data);
       let code = res.code;
       if (code === 200) {
         let pro = res.data.product;
         HandleClose();
         HandleSuccess(pro);
-      } else {
-        setError(res.message);
+      } else 
+      {
+        HandleFailed()       
       }
-    } catch (err) {
+    } catch (err) 
+    {
+        HandleFailed()
+        HandleClose();
       console.log("Lỗi Khi Thêm Sản Phẩm: ", err);
     }
   };
@@ -107,12 +112,12 @@ const AddProductTab = ({ isOpen, HandleClose, HandleSuccess }) => {
         placement="bottom"
         title={
           <div style={{ display: 'flex', justifyContent: 'start', alignItems: 'center' }}>
-          <div style={{marginRight: 8}}>Thêm Sản Phẩm Mới</div>
+          <div style={{marginRight: 8}}>Chỉnh Sửa Sản Phẩm</div>
           <Space >
             <Button onClick={HandleClose}>Thoát</Button>
-            <Button onClick={onSubmit} type="primary">
-              Thêm
-            </Button>
+            <Btn onClick={onSubmit} variant="warning">
+              Sửa
+            </Btn>
           </Space>
         </div>
         }
@@ -132,6 +137,8 @@ const AddProductTab = ({ isOpen, HandleClose, HandleSuccess }) => {
             <Col span={12}>
               <Form.Item label="BarCode">
                 <Input
+                  disabled={true}
+                  defaultValue={Product.BarCode}
                   onFocus={ClearMess}
                   name="BarCode"
                   placeholder="Vui Lòng nhập BarCode"
@@ -142,6 +149,7 @@ const AddProductTab = ({ isOpen, HandleClose, HandleSuccess }) => {
             <Col span={12}>
               <Form.Item label="Tên Sản Phẩm">
                 <Input
+                  defaultValue={Product.ProductName}
                   onFocus={ClearMess}
                   name="ProductName"
                   placeholder="Vui Lòng nhập Tên sản phẩm"
@@ -155,6 +163,7 @@ const AddProductTab = ({ isOpen, HandleClose, HandleSuccess }) => {
             <Col span={12}>
               <Form.Item label="Giá Gốc">
                 <Input
+                  defaultValue={parseFloat(Product.OriginPrice)}
                   onFocus={ClearMess}
                   name="OriginPrice"
                   placeholder="Vui Lòng nhập giá"
@@ -165,6 +174,7 @@ const AddProductTab = ({ isOpen, HandleClose, HandleSuccess }) => {
             <Col span={12}>
               <Form.Item label="Giá Bán">
                 <Input
+                  defaultValue={parseFloat(Product.DisplayPrice)}
                   onFocus={ClearMess}
                   name="DisplayPrice"
                   placeholder="Vui Lòng nhập giá"
@@ -177,6 +187,7 @@ const AddProductTab = ({ isOpen, HandleClose, HandleSuccess }) => {
             <Col span={12}>
               <Form.Item label="Thể loại">
                 <Input
+                  defaultValue={Product.Category.join(" | ")}
                   onFocus={ClearMess}
                   name="Category"
                   placeholder="Vui Lòng nhập thể loại. Cách nhau bởi dấu |"
@@ -187,6 +198,7 @@ const AddProductTab = ({ isOpen, HandleClose, HandleSuccess }) => {
             <Col span={12}>
               <Form.Item label="Mô Tả">
                 <Input
+                  defaultValue={Product.Description}
                   onFocus={ClearMess}
                   name="Description"
                   placeholder="Vui Lòng nhập mô tả sản phẩm"
@@ -198,7 +210,8 @@ const AddProductTab = ({ isOpen, HandleClose, HandleSuccess }) => {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item label="Link Ảnh">
-                <Input                
+                <Input
+                  defaultValue={Product.linkImg}
                   onFocus={ClearMess}
                   name="LinkImg"
                   placeholder="Vui lòng nhập Link ảnh"
@@ -213,11 +226,11 @@ const AddProductTab = ({ isOpen, HandleClose, HandleSuccess }) => {
   );
 };
 
-const SendAdd = async (server, tokenLogin, data) => {
+const SendEdit = async (server, tokenLogin, data) => {
   try {
     const res = await axios({
       url: server,
-      method: "POST",
+      method: "PUT",
       headers: {
         authorization: `bearer ${tokenLogin}`,
         "Content-Type": "application/json",
@@ -227,7 +240,7 @@ const SendAdd = async (server, tokenLogin, data) => {
 
     return res.data;
   } catch (err) {
-    console.log("Error at 'Add Product' - SendAdd: ", err);
+    console.log("Error at 'Edit Product' - SendEdit: ", err);
     return {
       code: 500,
       data: {
@@ -239,4 +252,4 @@ const SendAdd = async (server, tokenLogin, data) => {
   }
 };
 
-export default AddProductTab;
+export default EditProductTab;

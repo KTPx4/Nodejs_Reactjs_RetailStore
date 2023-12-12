@@ -2,23 +2,57 @@ import { useEffect, useState } from "react";
 import React from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
-import {
-  EditOutlined,
-  DeleteOutlined,
-  PlusOutlined ,
-  QuestionCircleOutlined
-} from "@ant-design/icons";
-import { Avatar, Card ,Button,Popconfirm , Col, DatePicker, Drawer, Form, Input, Row, Select, Space} from "antd";
+import { Descriptions, Modal, Card, Select } from "antd";
 
 const { Meta } = Card;
 const { Option } = Select;
 
-
+const items = [
+  {
+    key: "1",
+    label: "BarCode",
+    children: "123456",
+  },
+  {
+    key: "2",
+    label: "Tên Sản Phẩm",
+    children: "Iphone",
+  },
+  {
+    key: "3",
+    label: "Giá Gốc",
+    children: "$111.1111",
+  },
+  {
+    key: "4",
+    label: "Giá Bán",
+    children: "$111.1111",
+  },
+  {
+    key: "5",
+    label: "Ngày Tạo",
+    children: "12/12/12",
+  },
+  {
+    key: "6",
+    label: "Thể Loại",
+    children: "Phone Vip Pro",
+  },
+  {
+    key: "7",
+    label: "Mô Tả",
+    children:
+      "No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China,No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, ChinaNo. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, ChinaNo. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China",
+  },
+];
 
 const _Root_IMG = __dirname + "img";
 const TestPage = (props) => {
+  
+  const [isAdmin, setAdmin] = useState(false);
   const [open, setOpen] = useState(false);
 
+  const [modal2Open, setModal2Open] = useState(false);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -36,213 +70,33 @@ const TestPage = (props) => {
     document.head.appendChild(link);
   }, []);
 
+  if (!isAdmin) {
+    items.splice(2, 1);
+  }
+
   return (
     <HelmetProvider>
       <Helmet>
         <link rel="stylesheet" type="text/css" href="/css/test.css" />
       </Helmet>
-    
-    <div className="row">
-        <div className="mt-3 col-12 col-sm-4 col-md-3 col-xl-2  d-flex justify-content-center ">
-          <Card
-            style={{ width: 220 }}
-            cover={
-              <img
-                alt="example"
-                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-              />
-            }
-            actions={[
-              <EditOutlined key="edit" />,
-              <Popconfirm
-              onConfirm={()=> alert("ok")}
-              title="Delete the task"
-              description="Are you sure to delete this task?"
-              icon={
-                <QuestionCircleOutlined
-                  style={{
-                    color: 'red',
-                  }}
-                />
-              }
-            >
-              <DeleteOutlined />
-            </Popconfirm>
-              
-            
-            ]}
-          >
-            <Meta
-              avatar={
-                <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel" />
-              }
-              title="Card titlesafsdfdsfsdfsdfsd"
-              description="This is the descsdfffffffffription"
-            />
-          </Card>
-        </div>
-    </div>
 
-      <div className="row">
-        <div className="mt-3 col-12">
-        <Button type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
-          New account
-        </Button>
-        <Drawer
-        placement="bottom"
-          title="Create a new account"
-          width={720}
-          onClose={onClose}
-          open={open}
-          styles={{
-            body: {
-              paddingBottom: 80,
-            }
+      <>
+        <Modal
+          title="Thôn Tin Sản Phẩm"
+          centered
+          open={true}
+          onOk={() => setModal2Open(false)}
           
-          }}
-          extra={
-            <Space>
-              <Button onClick={onClose}>Cancel</Button>
-              <Button onClick={onClose} type="primary">
-                Submit
-              </Button>
-            </Space>
-          }
         >
-          <Form layout="vertical" hideRequiredMark
-          >
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  name="name"
-                  label="Name"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please enter user name',
-                    },
-                  ]}
-                >
-                  <Input placeholder="Please enter user name" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="url"
-                  label="Url"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please enter url',
-                    },
-                  ]}
-                >
-                  <Input
-                    style={{
-                      width: '100%',
-                    }}
-                    addonBefore="http://"
-                    addonAfter=".com"
-                    placeholder="Please enter url"
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  name="owner"
-                  label="Owner"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please select an owner',
-                    },
-                  ]}
-                >
-                  <Select placeholder="Please select an owner">
-                    <Option value="xiao">Xiaoxiao Fu</Option>
-                    <Option value="mao">Maomao Zhou</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="type"
-                  label="Type"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please choose the type',
-                    },
-                  ]}
-                >
-                  <Select placeholder="Please choose the type">
-                    <Option value="private">Private</Option>
-                    <Option value="public">Public</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  name="approver"
-                  label="Approver"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please choose the approver',
-                    },
-                  ]}
-                >
-                  <Select placeholder="Please choose the approver">
-                    <Option value="jack">Jack Ma</Option>
-                    <Option value="tom">Tom Liu</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="dateTime"
-                  label="DateTime"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please choose the dateTime',
-                    },
-                  ]}
-                >
-                  <DatePicker.RangePicker
-                    style={{
-                      width: '100%',
-                    }}
-                    getPopupContainer={(trigger) => trigger.parentElement}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  name="description"
-                  label="Description"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'please enter url description',
-                    },
-                  ]}
-                >
-                  <Input.TextArea rows={4} placeholder="please enter url description" />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </Drawer>
-        </div>
-      </div>
-  
+          <Descriptions
+            bordered
+            style={{ maxHeight: 400, overflow: "scroll" }}
+            column={1}
+            title=""
+            items={items}
+          />
+        </Modal>
+      </>
     </HelmetProvider>
   );
 };

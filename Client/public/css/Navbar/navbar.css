@@ -82,7 +82,16 @@ element.style {
     border-bottom: var(--bs-offcanvas-border-width) solid var(--bs-offcanvas-border-color);
     transform: translateY(-100%);
 }
-
+.offcanvas, .offcanvas-xxl, .offcanvas-xl, .offcanvas-lg, .offcanvas-md, .offcanvas-sm {
+    --bs-offcanvas-height: 100vh !important;
+    background-color: grey !important;
+}
+.offcanvas-body .offcanvas-sm{
+   
+} 
+.ant-drawer-content{
+    background-color: grey !important;
+}
 @media (min-width: 576px){
 
         .navbar-expand-sm .offcanvas {

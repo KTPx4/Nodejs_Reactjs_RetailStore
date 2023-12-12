@@ -105,6 +105,9 @@
 	background-color: transparent;
 }
 
+.ant-modal-body{
+  background: #b4b9b9;
+}
 @media (min-width: 1400px){
   .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
       max-width: 1700px;

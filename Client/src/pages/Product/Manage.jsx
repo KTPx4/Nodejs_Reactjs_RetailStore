@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import React from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import LoadingConponent from "../../components/Loading/LoadingComponent";
+import ViewProductTab from "../../components/Modal/viewProduct";
 import AddProductTab from "../../components/Modal/Addproduct";
+import EditProductTab from "../../components/Modal/EditProduct";
 import { useSelector } from "react-redux";
 import {
   EditOutlined,
@@ -46,6 +48,11 @@ const ProductPage = (props) => {
   const [ErrorMess, setError] = useState("");
   const [SuccessMess, setSuccess] = useState("");
 
+  const [openView, setModalView] = useState(false)
+  const [currentProd, setCurrPro] = useState(null)
+
+  const [openEdit, setModalEdit] = useState(false)
+
   // Notice add success
   const [AddNotice, setAddNotice] = useState(false);
   const [SuccessNotice, setSuccessNotice] = useState(false);
@@ -81,7 +88,7 @@ const ProductPage = (props) => {
         className: "bg-danger text-light",
         message: "Thao Tác Không Thành Công",
         description:
-          "Hành động chưa thể thực hiện ngay lúc này. Vui lòng thử lại sau",
+          "Hành động không thể thực hiện. Vui lòng thử lại sau",
         icon: <CheckCircleOutlined style={{ color: "#ffff" }} />,
       });
 
@@ -92,9 +99,27 @@ const ProductPage = (props) => {
   // show notice add success
   const openNotiAdd = (prod) => {
     setListProd((pre) => [...pre, prod]);
-    console.log(prod);
+  
     setAddNotice(true);
   };
+
+  const openNotiEdit = (prod) => {
+    setListProd(
+      LIST_PROD.map(product => 
+      {
+        if (product.BarCode === prod.BarCode) {
+          return prod;
+        } 
+        else 
+        {
+          return product;
+        }
+      })
+    )
+    setSuccessNotice(true);
+  };
+
+  const openNotiFail = ( )=> setErrNotice(true)
 
   //  search item
   const handleSearchInputChange = () => {
@@ -108,10 +133,16 @@ const ProductPage = (props) => {
   };
 
   // show edit
-  const EditProduct = (prod) => {
-    console.log("edit", prod);
+  const EditProduct = (prod) => 
+  {
+    setCurrPro(prod)
+    setModalEdit(true)
   };
 
+  const ViewProduct = (prod) =>{
+    setCurrPro(prod)
+    setModalView(true)
+  }
   // delete
   const DeleteProduct = async (prod) => {
     try {
@@ -143,6 +174,7 @@ const ProductPage = (props) => {
         },
       })
         .then((res) => {
+          setLoading(false)
           let code = res.data.code;
           if (code === 400) {
             alert(res.data.message);
@@ -180,7 +212,12 @@ const ProductPage = (props) => {
     if (LIST_PROD?.length > 0) {
       setLoad(true);
     }
+    
   }, [LIST_PROD]);
+
+  
+
+
 
   if (loadOk) {
     List_Content = LIST_PROD?.map((pro) => {
@@ -233,10 +270,11 @@ const ProductPage = (props) => {
                   height: 150,
                 }}
                 alt="Sản Phẩm"
-                src={imagePath}
+                // src={imagePath}
+                src={pro.linkImg}
               />
             }
-            actions={[<EyeFilled />, AdminEdit, AdminDelete]}
+            actions={[<EyeFilled onClick={()=>ViewProduct(pro)}/>, AdminEdit, AdminDelete]}
           >
             <Badge
               classNames="money"
@@ -255,8 +293,9 @@ const ProductPage = (props) => {
     });
     setTimeout(() => {
       setLoading(false);
-    }, 1200);
+    }, 1000);
   }
+
 
   let AlertMess = <></>;
   if (ErrorMess) {
@@ -275,6 +314,28 @@ const ProductPage = (props) => {
       />
     );
   }
+let ModalDisplay = <></>
+
+if(openView)
+{
+  ModalDisplay = 
+      <ViewProductTab 
+          isOpen={openView}
+          HandleClose={() => setModalView(false)}    
+          Product={currentProd}    
+      />     
+}
+if(openEdit)
+{
+  ModalDisplay = 
+    <EditProductTab 
+      isOpen={openEdit}
+      HandleClose= {()=> setModalEdit(false)}
+      HandleSuccess={openNotiEdit}
+      HandleFailed={openNotiFail}
+      Product={currentProd}    
+    />
+}
 
   return (
     <HelmetProvider>
@@ -287,7 +348,7 @@ const ProductPage = (props) => {
       </Helmet>
 
       {isLoading && <LoadingConponent />}
-
+      {ModalDisplay}
       <AddProductTab
         isOpen={openAdd}
         HandleClose={() => setOpenAdd(false)}
@@ -322,15 +383,30 @@ const ProductPage = (props) => {
     </HelmetProvider>
   );
 };
-
 function formatMoney(str) {
   // Remove any non-digit characters from the string
   let num = str.toString().replace(/\D/g, "");
-  // Convert the string to a number and divide by 100
-  let val = Number(num) / 100;
-  // Format the number as a currency string
-  return "$" + val.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+
+  // Convert the string to a number
+  let val = Number(num);
+
+  // Check if the number has decimal places
+  if (num.indexOf('.') !== -1) {
+    // If there are decimal places, format as currency with exact decimal places
+    return "$" + val.toLocaleString(undefined, { minimumFractionDigits: num.split('.')[1].length, maximumFractionDigits: num.split('.')[1].length });
+  } else {
+    // If it's an integer, format as currency without decimal places
+    return "$" + val.toLocaleString();
+  }
 }
+// function formatMoney(str) {
+//   // Remove any non-digit characters from the string
+//   let num = str.toString().replace(/\D/g, "");
+//   // Convert the string to a number and divide by 100
+//   let val = Number(num) / 100;
+//   // Format the number as a currency string
+//   return "$" + val.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+// }
 
 const SendDelete = async (server, tokenLogin) => {
   try {
