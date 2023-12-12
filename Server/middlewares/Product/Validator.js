@@ -1,4 +1,4 @@
-const Yup =  require('Yup')
+const Yup =  require('yup')
 
 const ProductModel = require('../../models/Product')
 const OrderDetailModel = require("../../models/OrderDetail")

@@ -13,7 +13,7 @@ const _Root_IMG = __dirname + "img";
 
 const AdminPage = () => {
   const Key_Token_Auth = process.env.REACT_APP_AUTH_LOGIN || "TOKEN_AUTH_LOGIN";
-  const _URLServer = process.env.REACT_APP_SERVER || "http://localhost:3001";
+  const _URLServer = process.env.REACT_APP_SERVER || "";
   const tokenLogin = localStorage.getItem(Key_Token_Auth) || "";
 
   const [isLoading, setLoading] = useState(true);
@@ -81,12 +81,11 @@ const AdminPage = () => {
 
   const LoadAll = (search) => {
     // Thêm dữ liệu vào URL
-    const urlWithSearchParams = new URL(serverGETALL);
-    urlWithSearchParams.searchParams.append("search", search);
-
+    const urlWithSearchParams = serverGETALL + "?search=" + search
+   
     setTimeout(async () => {
       await axios({
-        url: urlWithSearchParams.toString(),
+        url: urlWithSearchParams,
         method: "GET",
         headers: {
           authorization: `Bear ${tokenLogin}`, // token auth login,
@@ -288,7 +287,7 @@ const AdminPage = () => {
               <div className="projects-inner">
                 <header className="projects-header">
                   <div className="title">Danh sách nhân viên</div>
-                  <div className="count">| {LIST_ACCOUNT.length - 1} Người</div>
+                  <div className="count">| {LIST_ACCOUNT.length } Người</div>
 
                   <div
                     className="btn btn-success btn-add-staff btn-header"

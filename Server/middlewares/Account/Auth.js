@@ -31,7 +31,8 @@ const authAccount =  (req, res, next) =>{
                 message: 'Đăng nhập thất bại hoặc phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!'
             })
         }
-        let account = await AccountModel.findOne({Email: data.email})
+        let email = data.email?.toLowerCase()
+        let account = await AccountModel.findOne({Email: email})
         
         if(!account)
         {
@@ -90,11 +91,6 @@ const authRoleAmin = async(req, res, next)=>{
    
     })
    
-   
-           
-    
-        
-       
     
 }
 

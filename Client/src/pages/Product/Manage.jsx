@@ -31,7 +31,7 @@ const _Root_IMG = __dirname + "img";
 
 const ProductPage = (props) => {
   const Key_Token_Auth = process.env.REACT_APP_AUTH_LOGIN || "TOKEN_AUTH_LOGIN";
-  const _URLServer = process.env.REACT_APP_SERVER || "http://localhost:3001";
+  const _URLServer = process.env.REACT_APP_SERVER || "";
   const tokenLogin = localStorage.getItem(Key_Token_Auth) || "";
   const isAdmin = useSelector((state) => state.isAdmin);
 

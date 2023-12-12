@@ -10,7 +10,7 @@ import ForbiddenPage from "../pages/Account/Forbidden";
   {
 
     const _Token_Auth = process.env.REACT_APP_AUTH_LOGIN || 'TOKEN_AUTH_LOGIN';
-    const _URLServer = process.env.REACT_APP_SERVER || "http://localhost:3001";
+    const _URLServer = process.env.REACT_APP_SERVER || "";
     const tokenLogin = localStorage.getItem(_Token_Auth) || "";
     var serverLogin = `${_URLServer}/api/account/login`;
 

@@ -7,7 +7,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 
 const _Token_Auth = process.env.REACT_APP_AUTH_LOGIN || "TOKEN_AUTH_LOGIN";
-const _URLServer = process.env.REACT_APP_SERVER || "http://localhost:3001";
+const _URLServer = process.env.REACT_APP_SERVER || "";
 var ServerActive = `${_URLServer}/api/account/active`;
 
 const ActivePage = () => {

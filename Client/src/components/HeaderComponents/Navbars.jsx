@@ -15,7 +15,7 @@ const _Token_Auth = process.env.REACT_APP_AUTH_LOGIN || "TOKEN_AUTH_LOGIN";
 
 const HeaderNav = () => {
   const [isProfileModalOpen, setProfileModalOpen] = useState(false);
-  const [urlServer, setUrlServer] = useState(process.env.REACT_APP_SERVER || 'http://localhost:3001');  
+  const [urlServer, setUrlServer] = useState(process.env.REACT_APP_SERVER || '');  
   
   const [NameUser, setNameUser] = useState('');
   const [idUser, setUserId] = useState('');

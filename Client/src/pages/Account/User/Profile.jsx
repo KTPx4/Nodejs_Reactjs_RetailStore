@@ -29,7 +29,7 @@ const ProfileModal = ({ showModal, handleClose, ID, NAME, AVT, EMAIL, me }) => {
   const [isLoading, setLoading] = useState(false);
 
   const [urlServer, setUrlServer] = useState(
-    process.env.REACT_APP_SERVER || "http://localhost:3001"
+    process.env.REACT_APP_SERVER || ""
   );
 
   const [SERVER_FIND_ACC, setServerFind] = useState(urlServer + "/api/account/profile");

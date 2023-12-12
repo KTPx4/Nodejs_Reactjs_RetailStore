@@ -19,8 +19,10 @@ const port = process.env.PORT || 3000
 const uploader = multer({dest: __dirname +'/uploads/'})
 
 app.use(cors())
-app.use(express.static('public'))
+
 app.use('/images', express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname + "/client")))
+
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
@@ -37,17 +39,17 @@ app.use('/api/account', AccountRouter(__dirname))
 
 app.use('/api/agents', AgentRouter)
 app.use('/api/products', ProductRouter)
-app.use('*', (req, res)=>{
-    res.json({
-        code: 404,
-        message: "The url not support"
-    })
-})
 
-// app.get("/", async(req, res)=> {
-//     const account = await AccountMode.find()
-//     res.json(account)
+// app.use('*', (req, res)=>{
+//     res.json({
+//         code: 404,
+//         message: "The url not support"
+//     })
 // })
+
+app.use('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/client/index.html'));
+});
 
 
 

@@ -18,7 +18,7 @@ const LoginPage = (props) => {
     const [redirectToRegister, setRedirectToRegister] = useState(false);
     const [error, setError] = useState('');
     const [Loading, setLoading] = useState(<></>)
-    const [urlServer, setUrlServer] = useState(process.env.REACT_APP_SERVER || 'http://localhost:3001');
+    const [urlServer, setUrlServer] = useState(process.env.REACT_APP_SERVER || '');
     const [showPassword, setShowPassword] = useState(false);
 
     const toggleShowPassword = () => {

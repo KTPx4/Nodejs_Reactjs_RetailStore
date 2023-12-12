@@ -2,11 +2,11 @@ const { google } = require("googleapis");
 const nodemailer = require("nodemailer");
 
 
-const CLIENT_ID = "250216999612-a06hluqqf48ov1a13luh934u2aobh0t4.apps.googleusercontent.com";
-const CLIENT_SECRET = "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";
-const REFRESH_TOKEN = "1//04e999ClCYcltCgYIARAAGAQSNwF-L9Ir8I8GFuGGaDjWHwGAkEO66bbHx_1z7z2Z6mV5dCQ5ZuuRc-tgpA8Sb1JB7gEOgX7tg-s";
-const REDIRECT_URI = "https://developers.google.com/oauthplayground";
-const MY_EMAIL ="kieuthanhphat.2003.2018hdb@gmail.com";
+const CLIENT_ID = process.env.MAIL_CLIENT_ID || "250216999612-a06hluqqf48ov1a13luh934u2aobh0t4.apps.googleusercontent.com";
+const CLIENT_SECRET = process.env.MAIL_CLIENT_SECRET || "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";
+const REFRESH_TOKEN =process.env.MAIL_REFRESH_TOKEN || "1//04e999ClCYcltCgYIARAAGAQSNwF-L9Ir8I8GFuGGaDjWHwGAkEO66bbHx_1z7z2Z6mV5dCQ5ZuuRc-tgpA8Sb1JB7gEOgX7tg-s";
+const REDIRECT_URI =process.env.MAIL_REDIRECT_URI || "https://developers.google.com/oauthplayground";
+const MY_EMAIL =process.env.MAIL_MY_EMAIL || "kieuthanhphat.2003.2018hdb@gmail.com";
 
 const oAuth2Client = new google.auth.OAuth2(
   CLIENT_ID,

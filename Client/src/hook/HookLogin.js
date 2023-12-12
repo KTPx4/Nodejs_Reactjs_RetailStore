@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 
 const _Token_Auth = process.env.REACT_APP_AUTH_LOGIN || 'TOKEN_AUTH_LOGIN';
-const _URLServer = process.env.REACT_APP_SERVER || 'http://localhost:3001';
+const _URLServer = process.env.REACT_APP_SERVER || '';
 const tokenLogin = localStorage.getItem(_Token_Auth) || '';
 const serverLogin = `${_URLServer}/api/account/login`;
 

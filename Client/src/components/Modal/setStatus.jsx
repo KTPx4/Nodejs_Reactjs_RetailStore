@@ -5,7 +5,7 @@ import axios from "axios";
 import { Alert, Modal, Button, Form, Image } from "react-bootstrap";
 
 const _Token_Auth = process.env.REACT_APP_AUTH_LOGIN || "TOKEN_AUTH_LOGIN";
-const urlServer = process.env.REACT_APP_SERVER || "http://localhost:3001";
+const urlServer = process.env.REACT_APP_SERVER || "";
 const urlSetStatus = urlServer + "/api/account/setstatus"
 
 

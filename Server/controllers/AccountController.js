@@ -5,7 +5,7 @@ const fs = require('fs');
 
 
 // Variable
-const SERVER_CLIENT = process.env.SERVER_CLIENT || 'http://localhost:3000' 
+const SERVER_CLIENT = process.env.SERVER_CLIENT || '' 
 const SECRET_ACTIVE = process.env.TOKEN_ACTIVE_ACCOUNT || 'token-active-account';
 const SECRET_LOGIN = process.env.TOKEN_LOGIN_ACCOUNT || 'token-login-account';
 
@@ -88,7 +88,7 @@ module.exports.Login = async(req, res) =>{
     let {user, password} = req.body 
   //  console.log("1 Request login");
     let accountUser = undefined
-
+    user = user?.toLowerCase();
     // find db
     await AccountModel.findOne({User: user})
     .then(account =>{
@@ -179,6 +179,7 @@ module.exports.Register = async(req, res)=>{
     let isActive = role.includes("Admin") ? true : false;
     let fLogin = role.includes("Admin") ? false : true;
     
+    email= email?.toLowerCase()
     //console.log("email:::: ", email);  
 
     let UserName = email.split("@")[0];
@@ -215,9 +216,14 @@ module.exports.Register = async(req, res)=>{
             token = jwt.sign(data, SECRET_ACTIVE, { expiresIn:  '1m'}); // token auth account
             
             const subject = "Active Account";
+            let url = SERVER_CLIENT 
+            if(!url || url === "")
+            {
+                url = root
+            }
             const html = `
               <p>Hí bạn ${Account.fullName},</p>
-              <p>Vui lòng kích hoạt tài khoản của bạn <a href="${SERVER_CLIENT}/account/active?token=${token}" >Tại đây</a> </p>
+              <p>Vui lòng kích hoạt tài khoản của bạn <a href="${url}/account/active?token=${token}" >Tại đây</a> </p>
               <strong>Liên Kết sẽ hết hạn trong 1 phút, vui lòng nhanh cái tay lên ^^</strong>
               <p>Thank you</p>
               `;
@@ -318,7 +324,7 @@ module.exports.Active = async(req, res)=>{
 
 module.exports.SetStatus = async (req, res)=>{
     let {email} = req.body
-   
+    email= email?.toLowerCase()
     try{
        
         let account= await AccountModel.findOne({Email: email})
@@ -348,6 +354,9 @@ module.exports.SetStatus = async (req, res)=>{
 }
 module.exports.CreateActive = async(req, res)=>{
     let {email} = req.body
+
+    email= email?.toLowerCase()
+
     try{
 
         const data = {
@@ -355,11 +364,15 @@ module.exports.CreateActive = async(req, res)=>{
         }
     
         token = jwt.sign(data, SECRET_ACTIVE, { expiresIn: '1m' }); // token auth account
-        
+        let url = SERVER_CLIENT
+        if(!url || url === "")
+        {
+            url = root
+        }
         const subject = "Active Account";
         const html = `
           <p>Hí bạn ${email},</p>
-          <p>Vui lòng kích hoạt tài khoản của bạn <a href="${SERVER_CLIENT}/account/active?token=${token}" >Tại đây</a> </p>
+          <p>Vui lòng kích hoạt tài khoản của bạn <a href="${url}/account/active?token=${token}" >Tại đây</a> </p>
           <strong>Liên Kết sẽ hết hạn trong 1 phút, vui lòng nhanh cái tay lên ^^</strong>
           <p>Thank you</p>
           `;
@@ -530,7 +543,9 @@ module.exports.UpdateProfile = async (req, res) =>{
     let Account= undefined
     let {root}  = req.vars
     let {fullName, newPass, email , agentId} = req.body
-
+    
+    email= email?.toLowerCase()
+   
     Account = await AccountModel.findOne({Email: email})
     
     if(!Account)

@@ -24,7 +24,7 @@ const { Option } = Select;
 
 const _Token_Auth = process.env.REACT_APP_AUTH_LOGIN || "TOKEN_AUTH_LOGIN";
 const tokenLogin = localStorage.getItem(_Token_Auth) || "";
-const urlServer = process.env.REACT_APP_SERVER || "http://localhost:3001";
+const urlServer = process.env.REACT_APP_SERVER || "";
 const urlCreate = urlServer + "/api/products/";
 
 const AddProductTab = ({ isOpen, HandleClose, HandleSuccess }) => {
