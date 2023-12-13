@@ -3,8 +3,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { jwtDecode } from "jwt-decode";
-import { Avatar } from "antd";
 import SalesCart from "../../components/Form/SalesCart";
+import { Alert } from "react-bootstrap";
+import { Avatar, Tooltip,
+    Button,
+    Moda,
+    Modal,
+    Table,
+  InputNumber,
+ } from "antd";
 const _Root_IMG = __dirname + "img";
 
 const SalesPage = () => {
@@ -19,6 +26,66 @@ const SalesPage = () => {
   const [currentStaff, setcurrentStaff] = useState(null);
 
   const [ListCart, setListCart] = useState(null);
+
+  //modal create order
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const [ExMoney, setExMoney] = useState(-1)
+    const [CusMoney, setCusmoney] = useState(0)
+    const [Err, setErr] = useState(false)
+    
+    const [secondModal, setSecondModal] =useState(false)
+
+
+  const showModal = () => {
+    setOpen(true);
+   
+  };
+
+  const HandleMoney =()=> {
+    
+    if(CusMoney < parseFloat(SumPrice))
+    {
+        alert("Số tiền không đủ") 
+        setExMoney(-1)
+        return;
+    } 
+    else
+    {
+     
+        setExMoney(CusMoney - parseFloat(SumPrice))
+    }
+ }
+
+ const onChange = (value) => {
+    setExMoney(-1)
+    setErr(false)
+    setCusmoney(value)
+  };
+
+
+  const handleOk = () => {
+
+    let monyeCus = document.getElementById("moneyCustomer")?.value?.split(" ")[1]
+   
+    if(ExMoney < 0 ||  monyeCus === 0 || !monyeCus)
+    {
+        setErr(true)
+        return;
+    }
+
+    setLoading(true);
+    
+    setTimeout(() => {
+      setLoading(false);
+      setOpen(false);
+    }, 3000);
+  };
+  const handleCancel = () => {
+    setExMoney(-1)
+    setOpen(false);
+  };
 
   // load list  from db
   const LoadAll = (server) => {   
@@ -127,8 +194,8 @@ const SalesPage = () => {
     document.head.appendChild(link);
     let urlGet = _URLServer + "/api/products"
     LoadAll(urlGet)
-    let decode = jwtDecode(tokenLogin);
-  
+    let decode = jwtDecode(tokenLogin);  
+ 
     setcurrentStaff(decode);
   }, []);
 
@@ -167,7 +234,9 @@ const SalesPage = () => {
           </td>
           <td className="text-right">
             <div className="d-flex justify-content-start">
-              <Avatar
+                <Tooltip title="Thêm Vào">
+
+                <Avatar
                 onClick={()=> AddToCart(pro)}
                 className="btn-add"
                 shape="square"
@@ -175,6 +244,7 @@ const SalesPage = () => {
                 icon="+"
                 style={{ background: "#6e8293" }}
               />
+                </Tooltip>
             </div>
           </td>
         </tr>
@@ -183,12 +253,128 @@ const SalesPage = () => {
    
   }
 
+  const columsModal = [
+    {
+     key:"firtColumn",
+     dataIndex: "firtColumn"
+    },
+    {
+     key: "secondColumn",
+     dataIndex: "secondColumn"
+    }
+   ]
+
+   let SumTotalProduct = document.getElementById("countSumProd")?.innerHTML
+//    console.log(document.getElementById("countSumProd")?.innerHTML);
+  
+   let SumPrice = document.getElementById("sumPriceProds")?.value
+   let rowModal = [
+     {
+        key:"nameStaff",
+         firtColumn:"Tên Nhân Viên",
+         secondColumn: currentStaff?.fullName
+     },
+     {
+        key:"emailStaff",
+         firtColumn:"Email Nhân Viên",
+         secondColumn:currentStaff?.email,      
+     },
+     {
+        key:"sumProducts",
+         firtColumn:"Tổng Số Sản Phẩm",
+         secondColumn: ( 
+         <>
+             <InputNumber
+                defaultValue={SumTotalProduct}               
+                disabled={true}
+                />
+        </>)      ,      
+     },
+     {
+        key:"total",
+         firtColumn:"Tổng Giá Tiền",
+         secondColumn: ( <>
+             <InputNumber
+                 style={{ width: 140 }}
+                 id="totalPrice"
+                defaultValue={SumPrice}
+                formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                parser={(value) => value.replace(/\$\s?|(,*)/g, '')}                
+                disabled={true}
+                />
+        </>)      ,      
+     },
+     {
+        key:"givemoney",
+         firtColumn:"Tiền Khách Đưa",
+         secondColumn: ( <>
+              <InputNumber
+                 style={{ width: 140 }}
+                id="moneyCustomer"
+                 
+                 formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                 parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                 onChange={onChange}                 
+                 onBlur={HandleMoney}
+                 />
+         </>)      
+     },
+     {
+        key:"exchange",
+         firtColumn:"Tiền Thối Lại",
+         secondColumn: ( <>
+              <InputNumber
+                  style={{ width: 140 }}
+                 id="moneyExchange"
+                 value={ExMoney}
+                 defaultValue={0}
+                 formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                 parser={(value) => value.replace(/\$\s?|(,*)/g, '')}             
+                 disabled={true}
+                 />
+         </>)      
+     }
+   ]
+   
+   let FirtFormOrder =   <></>
+   if(open)
+   {
+    FirtFormOrder =<Modal
+    centered
+    open={open}
+    title={<div className="text-center">Nhập Thông Tin Thanh Toán</div>}
+    onOk={handleOk}
+    onCancel={handleCancel}
+    footer={[
+        Err && <Alert key="AlertFailed" className="text-center" variant="warning">Vui lòng nhập số tiền khách đưa để tiếp tục</Alert>,
+        <Button key="back" onClick={handleCancel}>
+        Thoát
+        </Button>,
+        <Button
+        key="submit"
+        type="primary"
+        loading={loading}
+        onClick={handleOk}
+        >
+        Bước Tiếp Theo
+        </Button>,,
+    ]}
+    >
+    <Table dataSource={rowModal} columns={columsModal} pagination={false} />
+    </Modal>
+   }
+   if(secondModal)
+   {
+    
+   }
+
   return (
     <>
       <HelmetProvider>
         <Helmet>
           <link rel="stylesheet" href="/css/product/sales.css" />
         </Helmet>
+        {FirtFormOrder}
         <div className="row">
           <div className="col-12 col-lg-5">
             <div className="projects mb-4">
@@ -200,7 +386,7 @@ const SalesPage = () => {
                     </div>
                     <div className="row text-center">
                       <div className="wrap col-12">
-                        <div className="search d-flex justify-content-center">
+                        <div className="search d-flex justify-content-center mt-2">
                           <input
                             id="searchProd"
                             type="text"
@@ -263,6 +449,8 @@ const SalesPage = () => {
                     ListProduct={ListCart} 
                     inCount={InCount} 
                     deCount={DeCount}
+                    clearList={()=> setListCart(null)}
+                    showModal={showModal}
                   />
 
                 </div>
