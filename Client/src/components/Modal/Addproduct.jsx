@@ -17,6 +17,7 @@ import {
   Select,
   Space,
   notification,
+  InputNumber,
 } from "antd";
 
 const { Meta } = Card;
@@ -154,21 +155,24 @@ const AddProductTab = ({ isOpen, HandleClose, HandleSuccess }) => {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item label="Giá Gốc">
-                <Input
+              <InputNumber name="OriginPrice" onFocus={ClearMess} addonBefore="+" addonAfter="$" defaultValue={100} />
+                {/* <Input
                   onFocus={ClearMess}
                   name="OriginPrice"
                   placeholder="Vui Lòng nhập giá"
                   required
-                />
+                /> */}
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item label="Giá Bán">
-                <Input
+              <InputNumber name="DisplayPrice"  onFocus={ClearMess} addonBefore="+" addonAfter="$" defaultValue={100} />
+                
+                {/* <Input
                   onFocus={ClearMess}
                   name="DisplayPrice"
                   placeholder="Vui Lòng nhập giá"
-                />
+                /> */}
               </Form.Item>
             </Col>
           </Row>

@@ -1,0 +1,157 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+.projects {
+	background-color: transparent;
+	/* border: 1px solid #a59dd3; */
+
+	width: 100%;
+}
+
+.projects-inner {
+	border-radius: 4px;
+}
+.projects-header {
+	color: rgb(255, 255, 255);
+	padding: 22px;
+
+	display: flex;
+	justify-content: flex-start;
+    align-items: center;
+}
+.projects-header .count, .projects-header .title {
+	display: inline-block;
+}
+.projects-header .count {
+	color: #ccdcf3;
+}
+.projects-header .zmdi {
+	cursor: pointer;
+	float: right;
+	font-size: 16px;
+	margin: 5px 0;
+}
+.projects-header .title {
+	font-size: 22px;
+    font-weight: bold;
+}
+.projects-header .title + .count {
+	margin-left: 5px;
+}
+.projects-table {
+	background: transparent;
+	width: 100%;
+}
+
+.projects-table td, .projects-table th {
+	color: white;
+	padding: 10px 5px;
+	vertical-align: middle;
+}
+.projects-table td p {
+	font-size: 16px;
+}
+
+
+.projects-table {
+	background: transparent;
+	width: 100%;
+}
+
+.projects-table td, .projects-table th {
+	color: white;
+	padding: 10px 5px;
+	vertical-align: middle;
+}
+.projects-table td p {
+	font-size: 16px;
+}
+
+.listPro{
+  max-height: 650px;
+  min-height: 200px;
+  overflow: scroll;
+}
+.form-cart{
+    background-color: aliceblue;
+    border: 1px solid ;
+    border-radius: 15px;
+    height: 500px;
+    padding: 5px;
+    /* min-height: 300px; */
+    /* overflow: scroll; */
+}
+.table-list{
+  height: 400px;
+  overflow: auto;
+}
+.THNameProduct, .TDNameProduct{
+    max-width: 100px;
+
+}
+.columImg{
+    max-width: 120px;
+}
+.btn-add:hover{
+    background: #058b9c !important;
+}
+.namePro{
+    font-size: 13px !important;
+    max-height: 60px;
+    overflow: scroll;
+    overflow-x:  visible;
+}
+
+/* search bar */
+
+
+body{
+  background: #f2f2f2;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.search {
+  width: 100%;
+ 
+}
+
+.searchTerm {
+  width: 100%;
+  max-width: 250px;
+  border: 1px solid #9bb3b6;
+  border-right: none;
+  padding: 5px;
+  height: 30px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  color: #9DBFAF;
+}
+
+.searchTerm:focus{
+  color: #00B4CC;
+}
+
+.searchButton {
+    margin-top: 1px;
+  width: 40px;
+  height: 29px;
+  border: 1px solid #6e6f7a;
+  background: #a6b7b9;
+  text-align: center;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.wrap{
+  width: 100%; 
+}
+
+
+/*  */
+
+::-webkit-scrollbar{
+	background-color: transparent;
+}
+.row{
+  --bs-gutter-x: 0 !important;
+}

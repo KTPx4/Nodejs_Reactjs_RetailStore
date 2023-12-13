@@ -18,6 +18,7 @@ import {
   Select,
   Space,
   notification,
+  InputNumber,
 } from "antd";
 import { parseInt } from "lodash";
 
@@ -38,14 +39,14 @@ const EditProductTab = ({ isOpen, HandleClose, HandleSuccess, HandleFailed, Prod
 
   const onSubmit = async () => {
     try {
-      var barCode = document.getElementsByName("BarCode")[0].value;
-      var productName = document.getElementsByName("ProductName")[0].value;
-      var originPrice = document.getElementsByName("OriginPrice")[0].value;
-      var displayPrice = document.getElementsByName("DisplayPrice")[0].value;
-      var category = document.getElementsByName("Category")[0].value;
-      var description = document.getElementsByName("Description")[0].value;
-      var LinkImg = document.getElementsByName("LinkImg")[0].value;
-      
+      var barCode = document.getElementById("editBarCode").value;
+      var productName = document.getElementById("editProductName").value;
+      var originPrice = document.getElementById("editOriginPrice").value;
+      var displayPrice = document.getElementById("editDisplayPrice").value;
+      var category = document.getElementById("editCategory").value;
+      var description = document.getElementById("editDescription").value;
+      var LinkImg = document.getElementById("editLinkImg").value;
+      console.log(originPrice, displayPrice);
       if (
         !barCode ||
         !productName ||
@@ -141,6 +142,7 @@ const EditProductTab = ({ isOpen, HandleClose, HandleSuccess, HandleFailed, Prod
                   defaultValue={Product.BarCode}
                   onFocus={ClearMess}
                   name="BarCode"
+                  id="editBarCode"
                   placeholder="Vui Lòng nhập BarCode"
                   required
                 />
@@ -151,6 +153,7 @@ const EditProductTab = ({ isOpen, HandleClose, HandleSuccess, HandleFailed, Prod
                 <Input
                   defaultValue={Product.ProductName}
                   onFocus={ClearMess}
+                  id="editProductName"
                   name="ProductName"
                   placeholder="Vui Lòng nhập Tên sản phẩm"
                   required
@@ -162,23 +165,33 @@ const EditProductTab = ({ isOpen, HandleClose, HandleSuccess, HandleFailed, Prod
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item label="Giá Gốc">
-                <Input
+              <InputNumber 
+              name="OriginPrice"  
+              id="editOriginPrice"
+              onFocus={ClearMess} addonBefore="+" addonAfter="$" defaultValue={(Product.OriginPrice)} />
+
+                {/* <Input
                   defaultValue={parseFloat(Product.OriginPrice)}
                   onFocus={ClearMess}
                   name="OriginPrice"
                   placeholder="Vui Lòng nhập giá"
                   required
-                />
+                /> */}
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item label="Giá Bán">
-                <Input
+              <InputNumber name="DisplayPrice" 
+               onFocus={ClearMess} 
+               id="editDisplayPrice"
+               addonBefore="+" addonAfter="$" defaultValue={(Product.DisplayPrice)} />
+               
+                {/* <Input
                   defaultValue={parseFloat(Product.DisplayPrice)}
                   onFocus={ClearMess}
                   name="DisplayPrice"
                   placeholder="Vui Lòng nhập giá"
-                />
+                /> */}
               </Form.Item>
             </Col>
           </Row>
@@ -190,6 +203,7 @@ const EditProductTab = ({ isOpen, HandleClose, HandleSuccess, HandleFailed, Prod
                   defaultValue={Product.Category.join(" | ")}
                   onFocus={ClearMess}
                   name="Category"
+                  id="editCategory"
                   placeholder="Vui Lòng nhập thể loại. Cách nhau bởi dấu |"
                   required
                 />
@@ -201,6 +215,7 @@ const EditProductTab = ({ isOpen, HandleClose, HandleSuccess, HandleFailed, Prod
                   defaultValue={Product.Description}
                   onFocus={ClearMess}
                   name="Description"
+                  id="editDescription"
                   placeholder="Vui Lòng nhập mô tả sản phẩm"
                   required
                 />
@@ -214,6 +229,7 @@ const EditProductTab = ({ isOpen, HandleClose, HandleSuccess, HandleFailed, Prod
                   defaultValue={Product.linkImg}
                   onFocus={ClearMess}
                   name="LinkImg"
+                  id="editLinkImg"
                   placeholder="Vui lòng nhập Link ảnh"
                   required
                 />

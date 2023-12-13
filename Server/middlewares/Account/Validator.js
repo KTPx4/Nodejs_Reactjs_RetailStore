@@ -36,7 +36,7 @@ module.exports.InputRegister = async(req, res, next)=>{
             message: "Vui lòng nhập Email"
         });
     }
-    
+    email = email.toLowerCase()
     if (!validator.validate(email)) 
     {
         return res.json({
@@ -147,6 +147,7 @@ module.exports.InputSendAcitve = async (req, res, next) =>
             message: "Thiếu địa chỉ email"
         })
     }
+    email = email.toLowerCase()
     let account = await AccountModel.findOne({Email: email})
     
     if(!account)
@@ -206,6 +207,7 @@ module.exports.UpdateProfile = async(req, res, next)=>
     }
     else if(newPass && oldPass)
     {
+        email = email.toLowerCase()
         Account = await AccountModel.findOne({Email: email})
     
         if(!Account)

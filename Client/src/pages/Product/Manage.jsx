@@ -58,23 +58,24 @@ const ProductPage = (props) => {
   const [SuccessNotice, setSuccessNotice] = useState(false);
   const [ErrNotice, setErrNotice] = useState(false);
   let List_Content = <></>;
-
+ 
   useEffect(() => {
     if (AddNotice) {
       notification.open({
         placement: "bottomLeft",
-        className: "bg-success text-light",
+        className: "bg-success text-light notice",
         message: "Thêm Sản Phẩm Thành Công",
         description: "Một Sản Phẩm Đã Được Thêm",
         icon: <CheckCircleOutlined style={{ color: "#ffff" }} />,
       });
       setAddNotice(false);
+      
     }
 
     if (SuccessNotice) {
       notification.open({
         placement: "bottomLeft",
-        className: "bg-success text-light",
+        className: "bg-success notice",
         message: "Thao Tác Thành Công",
         description: "Hành động đã được thực thi",
         icon: <CheckCircleOutlined style={{ color: "#ffff" }} />,
@@ -85,7 +86,7 @@ const ProductPage = (props) => {
     if (ErrNotice) {
       notification.open({
         placement: "bottomLeft",
-        className: "bg-danger text-light",
+        className: "bg-danger text-light notice",
         message: "Thao Tác Không Thành Công",
         description:
           "Hành động không thể thực hiện. Vui lòng thử lại sau",
@@ -98,7 +99,14 @@ const ProductPage = (props) => {
 
   // show notice add success
   const openNotiAdd = (prod) => {
-    setListProd((pre) => [...pre, prod]);
+    if(!LIST_PROD)
+    {
+      setListProd({prod})
+    }
+    else {
+      setListProd((pre) => [...pre, prod]);
+
+    }
   
     setAddNotice(true);
   };

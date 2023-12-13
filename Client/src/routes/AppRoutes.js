@@ -21,6 +21,7 @@ import LoginPage from "../pages/Account/User/Login";
 import ErrorPage from "../pages/Error";
 import ActivePage from "../pages/Account/User/Active";
 import ProductPage from "../pages/Product/Manage";
+import SalesPage from "../pages/Product/Sales";
 
 //testing component
 import TestPage from "../pages/TestPage";
@@ -60,7 +61,7 @@ const AppRoutes = (props) => {
         <Route path="/product" element={<UserRouter><LayoutPage /></UserRouter>}>
           <Route index element={<ProductPage />} />   
           <Route path="views" element={<ProductPage/>}/>
-          <Route path="sales" element={<><p className="text-light">Sales Page</p> </>}/>
+          <Route path="sales" element={<SalesPage />}/>
         </Route>
         
         <Route path="*" element={<NotFound />} />

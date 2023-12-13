@@ -422,7 +422,7 @@ module.exports.ChangePassword = async (req, res) => {
         let { oldPassword, newPassword } = req.body;
        
         let email = req.User.Email;
-
+        email = email.toLowerCase()
         const account = await AccountModel.findOne({ Email: email });
 
         if (!account) 
@@ -497,6 +497,7 @@ module.exports.VerifyLogin = async (req, res) =>{
             })
         }
         let email = data.email || "";
+        email = email.toLowerCase()
         let acc =await AccountModel.findOne({Email: email})
         if(!acc)
         {
@@ -743,4 +744,3 @@ const upLoadAvt =async (file, root, AccUser)=>{
     return undefined
    
 }
-
