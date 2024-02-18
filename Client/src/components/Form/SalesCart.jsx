@@ -15,7 +15,7 @@ import {
   Modal,
 } from "antd";
 
-const SalesCart = ({ ListProduct, clearList, inCount, deCount ,showModal}) => {
+const SalesCart = ({ ListProduct, clearList, inCount, deCount, setListOrder ,showModal}) => {
 
 
   const openNotification = () => {
@@ -27,13 +27,7 @@ const SalesCart = ({ ListProduct, clearList, inCount, deCount ,showModal}) => {
     });
   };
 
-  const CreateOrder = () => {
-    if (!ListProduct || ListProduct?.length < 1) {
-      openNotification();
-      return;
-    }
-    showModal();
-  };
+ 
 
   let dataTBCart = [];
   const columnsTBCart = [
@@ -54,12 +48,12 @@ const SalesCart = ({ ListProduct, clearList, inCount, deCount ,showModal}) => {
     },
     {
       title: "Số lượng",
-      dataIndex: "quantityProd",
+      dataIndex: "Quantity",
       key: "quantityPro",
     },
     {
       title: "Thành tiền",
-      dataIndex: "priceProds",
+      dataIndex: "TotalPrice",
       key: "pricePros",
     },
 
@@ -69,64 +63,83 @@ const SalesCart = ({ ListProduct, clearList, inCount, deCount ,showModal}) => {
       key: "action",
     },
   ];
-
+  const CreateOrder = () => 
+  {
+    if (!ListProduct || ListProduct?.length < 1) {
+      openNotification();
+      return;
+    }
+    setListOrder( 
+      dataTBCart.map(({ BarCode, Quantity, TotalPrice }) => ({
+      BarCode,
+      Quantity,
+      TotalPrice,
+    })))
+    showModal();
+  };
 
   if (ListProduct?.length > 0) {
     let index = 1;
-    dataTBCart = ListProduct.map((pro) => ({
-      key: pro.BarCode.toString(),
-      stt: (index++).toString(),
-      nameProd: pro.ProductName,
-      priceProd: pro.DisplayPrice,
-      quantityProd: pro.Count,
-      priceProds: parseFloat(pro.DisplayPrice) * parseFloat(pro.Count),
-      action: [
-        <Avatar
-          key="upCount"
-          className="btn-add"
-          shape="square"
-          size="large"
-          icon="+"
-          onClick={() => inCount(pro)}
-          style={{ marginRight: 3, background: "#6e8293" }}
-        />,
-        <Avatar
-          key="downCount"
-          className="btn-add"
-          shape="square"
-          size="large"
-          icon="-"
-          onClick={() => deCount(pro)}
-          style={{ marginRight: 3, background: "#6e8293" }}
-        />,
-      ],
-    }));
+    try{
+      dataTBCart = ListProduct.map((pro) => ({
+        BarCode: pro.BarCode.toString(),
+        key: pro.BarCode.toString(),
+        stt: (index++).toString(),
+        nameProd: pro.ProductName.toString(),
+        priceProd: pro.DisplayPrice.toString(),
+        Quantity: pro.Count.toString(),
+        TotalPrice: (parseFloat(pro.DisplayPrice) * parseFloat(pro.Count)).toString(),
+        action: [
+          <Avatar
+            key="upCount"
+            className="btn-add"
+            shape="square"
+            size="large"
+            icon="+"
+            onClick={() => inCount(pro)}
+            style={{ marginRight: 3, background: "#6e8293" }}
+          />,
+          <Avatar
+            key="downCount"
+            className="btn-add"
+            shape="square"
+            size="large"
+            icon="-"
+            onClick={() => deCount(pro)}
+            style={{ marginRight: 3, background: "#6e8293" }}
+          />,
+        ],
+      }));
+    }
+    catch(err)
+    {
+      console.log("err", err);
+    }
+ 
   }
 
   let SumPrice = 0;
   let SumTotalProduct = 0;
-  if (dataTBCart?.length > 0) {
-    dataTBCart.forEach((row) => {
-      SumPrice += parseFloat(row.priceProds);
-      SumTotalProduct += parseInt(row.quantityProd);
+  if (dataTBCart?.length > 0) 
+  {
+    dataTBCart.forEach((row) => 
+    {
+      SumPrice += parseFloat(row.TotalPrice);
+      SumTotalProduct += parseInt(row.Quantity);     
+
     });
   }
 
-  
 
 
   return (
     <>    
-   
-
-
-
       <div className="Count m-2 ">
         <div>
           <h5>
             <Tooltip title="Tổng Sản Phẩm">
               <ShoppingCartOutlined /> Tổng Sản Phẩm:
-              <i id="countSumProd" className="SumTotalProduct">{SumTotalProduct}</i>
+                <i id="countSumProd" className="SumTotalProduct">{SumTotalProduct}</i>
             </Tooltip>
           </h5>
         </div>

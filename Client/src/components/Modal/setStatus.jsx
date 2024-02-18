@@ -33,7 +33,7 @@ const SetStatus = ({ show, handleClose, EMAIL, STATUS }) => {
     setLoading(true);
     setTimeout(async ()=>{
       try {
-        console.log(urlSetStatus);
+
         const res = await PostStatus(urlSetStatus, tokenLogin,  EMAIL);
         let code = res.code
         let mess = res.message

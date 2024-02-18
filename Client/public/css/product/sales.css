@@ -5,7 +5,10 @@
 
 	width: 100%;
 }
+.Menu-Title-product-sales{
+	color: #0be9e2;
 
+}
 .projects-inner {
 	border-radius: 4px;
 }
@@ -130,14 +133,14 @@ body{
 }
 
 .searchButton {
-    margin-top: 1px;
+  margin-top: 0px;
   width: 40px;
-  height: 29px;
+  height: 30px;
   border: 1px solid #6e6f7a;
   background: #a6b7b9;
   text-align: center;
   color: #fff;
-  border-radius: 0 5px 5px 0;
+ 
   cursor: pointer;
   font-size: 20px;
 }

@@ -60,7 +60,7 @@ const ActivePage = () => {
     await axios
       .get(url)
       .then((res) => {
-        console.log(res);
+  
         let code = res.data.code;     
     
         if (code === 200) 
@@ -74,7 +74,7 @@ const ActivePage = () => {
       })
       .catch((err) => 
       {
-        console.log(err);
+
         return 400;
       });
   };

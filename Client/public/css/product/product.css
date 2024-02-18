@@ -111,6 +111,60 @@
 .ant-notification-notice-message , .ant-notification-notice-description{
   color: white !important;
 }
+
+/* Search box */
+.searchBox 
+{
+    /* position: absolute;   */
+   margin-left: 20px;
+    background: #7f848b ;
+    height: 40px;
+    border-radius: 40px;
+    padding: 0px 4px 0 4px;
+	display: flex;
+	align-items: center;
+}
+
+.searchBox:hover > .searchInput {
+    width: 400px;
+    padding: 0px 3px 0px 8px;
+}
+
+.searchBox:hover > .searchButton {
+  background: rgba(139 191 189 / 85%);
+  color : #ffffff;
+}
+
+.searchButton {
+    color: white;
+    float: right;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #2f3640;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s;
+}
+
+.searchInput {
+    border:none;
+    background: none;
+    outline:none;
+    float:left;
+    padding: 0;
+    color: white;
+    font-size: 16px;
+    transition: 0.4s;    
+    width: 0px;
+
+}
+.searchInput::placeholder{
+	color: rgba(255, 255, 255, 0.575);
+}
+
+
 @media (min-width: 1400px){
   .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
       max-width: 1700px;

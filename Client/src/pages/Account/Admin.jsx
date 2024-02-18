@@ -1,6 +1,6 @@
 import { useState, useContext, createContext, useEffect } from "react";
 import axios from "axios";
-import _ from "lodash";
+// import _ from "lodash";
 import React from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import ProfileModal from "./User/Profile";
@@ -107,23 +107,23 @@ const AdminPage = () => {
 
             setTimeout(() => {
               setLoading(false);
-            }, 1200);
+            }, 500);
           } else {
             alert(res.data.message);
           }
         })
         .catch((err) => {
-          console.log("Error at login fetch: ", err);
+          console.log("Error at Admin Page: ", err);
           setTimeout(() => {
             window.location.replace("/error");
           }, 4000);
         });
-    }, 500);
+    }, 300);
   };
-
+  let filteredList = null
   if (loadSuccess) {
     listTBody = <></>;
-    const filteredList = LIST_ACCOUNT.filter(
+    filteredList = LIST_ACCOUNT.filter(
       (acc) => acc._id !== currentID ?? ""
     );
 
@@ -272,6 +272,7 @@ const AdminPage = () => {
       {isLoading && <LoadingConponent />}
 
       {OpenModal}
+      
       {
         <AddStaffModal
           show={showAddStaff}
@@ -287,7 +288,7 @@ const AdminPage = () => {
               <div className="projects-inner">
                 <header className="projects-header">
                   <div className="title">Danh sách nhân viên</div>
-                  <div className="count">| {LIST_ACCOUNT.length } Người</div>
+                  <div className="count">| {filteredList?.length } Người</div>
 
                   <div
                     className="btn btn-success btn-add-staff btn-header"

@@ -13,6 +13,8 @@ const AccountRouter = require('./routes/AccountRouter')
 const AgentRouter = require('./routes/AgentRouter')
 const UploadRouter= require('./routes/UploadRouter')
 const ProductRouter = require("./routes/ProductRouter")
+const CustomerRouter = require('./routes/CustomerRouter')
+const OrderRouter = require('./routes/OrderRouter')
 
 const port = process.env.PORT || 3000
 
@@ -39,7 +41,8 @@ app.use('/api/account', AccountRouter(__dirname))
 
 app.use('/api/agents', AgentRouter)
 app.use('/api/products', ProductRouter)
-
+app.use('/api/customers', CustomerRouter)
+app.use('/api/orders', OrderRouter)
 // app.use('*', (req, res)=>{
 //     res.json({
 //         code: 404,

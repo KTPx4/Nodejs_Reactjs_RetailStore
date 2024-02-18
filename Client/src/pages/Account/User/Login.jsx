@@ -87,7 +87,7 @@ const LoginPage = (props) => {
                     setError("Không Thể Kết Nối Đến Server");
                 }
                 else if (code === 203 || code === 200) {
-                    console.log("ok");
+                 
                     let token = res.data.data.token;
                     let role = res.data.data.role;
                     setError('');

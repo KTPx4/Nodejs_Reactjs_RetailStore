@@ -6,8 +6,14 @@ let OrderDetailSchema = new mongoose.Schema({
         ref: 'Order'
     },
     BarCodeID: String,
-    Quantity: Number,
-    TotalPrice: Number
+    Quantity: {
+        type: Number,
+        default: 0
+    },
+    TotalPrice: {
+        type: Number,
+        default: 0
+    }
 })
 
 module.exports = mongoose.model('OrderDetail', OrderDetailSchema)

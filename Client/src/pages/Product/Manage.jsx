@@ -131,8 +131,9 @@ const ProductPage = (props) => {
 
   //  search item
   const handleSearchInputChange = () => {
-    let value = document.getElementById("searchInput").value;
-    setSearchTerm(value);
+    let urlGet = _URLServer + "/api/products";
+    let search = document.getElementById("searchInput").value;
+    LoadAll(search)
   };
 
   // show input add
@@ -170,11 +171,12 @@ const ProductPage = (props) => {
   };
 
   // load list  from db
-  const LoadAll = () => {
+  const LoadAll = (search) => {
     setLoading(true);
+    let server =  _URLServer + "/api/products?search=" + search
     setTimeout(async () => {
       await axios({
-        url: _URLServer + "/api/products",
+        url: server,
         method: "GET",
         headers: {
           authorization: `Bear ${tokenLogin}`, // token auth login,
@@ -207,7 +209,7 @@ const ProductPage = (props) => {
 
   useEffect(() => {
     document.title = "Sản Phẩm";
-    LoadAll();
+    LoadAll("");
 
     // Change icon
     const link = document.createElement("link");
@@ -378,7 +380,27 @@ if(openEdit)
                 >
                   Thêm Sản Phẩm
                 </div>)}
-                
+                <div className="searchBox">
+                    <input
+                      id="searchInput"
+                      className="searchInput"
+                      type="text"
+                      name=""
+                      placeholder="Search"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleSearchInputChange(); // Gọi hàm tìm kiếm khi nhấn phím Enter
+                        }
+                      }}
+                    />
+                    <button
+                      className="searchButton"
+                      href="#"
+                      onClick={handleSearchInputChange}
+                    >
+                      <i className="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                  </div>
               </header>
             </div>
             <div className="row list-product  d-flex justify-content-start">

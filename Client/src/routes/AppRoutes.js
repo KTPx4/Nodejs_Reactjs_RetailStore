@@ -23,6 +23,9 @@ import ActivePage from "../pages/Account/User/Active";
 import ProductPage from "../pages/Product/Manage";
 import SalesPage from "../pages/Product/Sales";
 
+import ExportBill from "../pages/Order/ExportBill";
+
+import CustomerPage from "../pages/Customer/DashBoard";
 //testing component
 import TestPage from "../pages/TestPage";
 
@@ -63,7 +66,19 @@ const AppRoutes = (props) => {
           <Route path="views" element={<ProductPage/>}/>
           <Route path="sales" element={<SalesPage />}/>
         </Route>
+
+        <Route path="/customer" element={<UserRouter><LayoutPage /></UserRouter>} > 
+          <Route index element={<CustomerPage />} />   
+          <Route path="views" element={<CustomerPage/>}/>          
+        </Route>
         
+        <Route path="/orders" element={<UserRouter><LayoutPage /></UserRouter>} > 
+          <Route index element={<ExportBill />} />   
+          <Route path="bill" element={<ExportBill />}/>
+        </Route>
+
+   
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

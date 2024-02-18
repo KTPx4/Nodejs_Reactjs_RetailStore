@@ -20,7 +20,7 @@ import {
   notification,
   InputNumber,
 } from "antd";
-import { parseInt } from "lodash";
+// import { parseInt } from "lodash";
 
 const { Meta } = Card;
 const { Option } = Select;
@@ -46,7 +46,7 @@ const EditProductTab = ({ isOpen, HandleClose, HandleSuccess, HandleFailed, Prod
       var category = document.getElementById("editCategory").value;
       var description = document.getElementById("editDescription").value;
       var LinkImg = document.getElementById("editLinkImg").value;
-      console.log(originPrice, displayPrice);
+
       if (
         !barCode ||
         !productName ||
@@ -85,6 +85,7 @@ const EditProductTab = ({ isOpen, HandleClose, HandleSuccess, HandleFailed, Prod
      
       let res = await SendEdit(urlEdit + barCode, tokenLogin, data);
       let code = res.code;
+ 
       if (code === 200) {
         let pro = res.data.product;
         HandleClose();

@@ -42,7 +42,7 @@ const AddStaffModal = ({ show, handleClose }) => {
     setLoading(true);
     setTimeout(async ()=>{
       try {
-        console.log(urlCreate);
+ 
         const res = await CreateAccount(urlCreate, tokenLogin, fullName, email);
         let code = res.code
         let mess = res.message

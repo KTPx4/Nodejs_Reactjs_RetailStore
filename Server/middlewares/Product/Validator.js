@@ -8,7 +8,6 @@ const ProductSchema = Yup.object().shape({
     BarCode: Yup.string().required('Thiếu thông tin BarCode').typeError('BarCode không hợp lệ'),
     ProductName: Yup.string().required('Thiếu thông tin ProductName').typeError('ProductName không hợp lệ'),
     OriginPrice: Yup.number().required('Thiếu thông tin OriginPrice').typeError('OriginPrice không hợp lệ'),
-  
     Category: Yup.array().of(Yup.string()).required('Thiếu thông tin Category').typeError('Category không hợp lệ, Category phải là một mảng'),
 });
 
@@ -89,19 +88,10 @@ module.exports.ExistsProduct = async(req, res, next) =>{
     }  
     else
     {
-        let OrD = await OrderDetailModel.find({BarCodeID: barcode})
-        if(OrD.length > 0)
-        {
-            return  res.json({
-                code: 400,
-                message: "Sản phẩm đã có đơn hàng, không thể xóa"
-            })
-        }
-        else
-        {
+        
 
-            return next()
-        }
+        return next()
+      
     }
 }
 

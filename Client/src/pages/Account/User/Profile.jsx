@@ -70,7 +70,7 @@ const ProfileModal = ({ showModal, handleClose, ID, NAME, AVT, EMAIL, me }) => {
     if (!me && isAdmin) {
       let url = SERVER_FIND_ACC + "/" + ID
       
-      console.log("url,",SERVER_FIND_ACC);
+
       
       let call = fetchData(url, tokenLogin);
 

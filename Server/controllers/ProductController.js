@@ -1,9 +1,24 @@
-
+const DetailModel = require('../models/OrderDetail')
 const ProductModel = require("../models/Product")
 
 module.exports.GetAll = async(req, res) =>{
     try{
-        let Products = await ProductModel.find()
+        let {search} = req.query   
+        
+        let Products = []
+        if(search)
+        {
+            Products = await ProductModel.find({
+                $or:[
+                    {BarCode: {$regex: new RegExp(search, 'i')}},
+                    {ProductName: {$regex: new RegExp(search, 'i')}}
+                ]
+            })
+        }
+        else
+        {
+            Products = await ProductModel.find()
+        }
 
         return res.json({
             code: 200,
@@ -108,22 +123,39 @@ module.exports.Update = async (req, res) =>{
 
 module.exports.Delete = async (req, res) =>{
     let {barcode} = req.params
-    await ProductModel.findOneAndDelete({BarCode: barcode}, {new: true})
-    .then(prod=>{
-        return res.json({
-            code: 200,
-            message: "Xóa thành công sản phẩm " + barcode,
-            data:{
-                product: prod
-            }
-        })
-    })
-    .catch(err =>{
-        console.log("Error at ProductController - Delete:", err);
+
+    let orderDetail = await DetailModel.findOne({BarCodeID: barcode})
+    if(orderDetail)
+    {
         return res.json({
             code: 400,
-            message: "Lỗi!, không thể xóa sản phẩm ngay lúc này. Vui lòng thử lại sau"
+            message: "Sản phẩm đã có đơn đặt hàng. Không thể xóa! ",
+            data:{
+                product: []
+            }
         })
-    })
+    }
+    else
+    {
+        await ProductModel.findOneAndDelete({BarCode: barcode}, {new: true})
+        .then(prod=>{
+            return res.json({
+                code: 200,
+                message: "Xóa thành công sản phẩm " + barcode,
+                data:{
+                    product: prod
+                }
+            })
+        })
+        .catch(err =>{
+            console.log("Error at ProductController - Delete:", err);
+            return res.json({
+                code: 400,
+                message: "Lỗi!, không thể xóa sản phẩm ngay lúc này. Vui lòng thử lại sau"
+            })
+        })
+    }
+
+
 }
 

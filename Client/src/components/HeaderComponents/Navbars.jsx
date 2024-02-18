@@ -75,7 +75,6 @@ const HeaderNav = () => {
         <NavDropdown.Item href="#">Để cho đẹp</NavDropdown.Item>
         <NavDropdown.Item href="#">Để cho đẹp</NavDropdown.Item>
       </NavDropdown>
-      <Nav.Link className="Menu-Title-report" href="/report">Báo Cáo</Nav.Link>
      </>
 
     );
